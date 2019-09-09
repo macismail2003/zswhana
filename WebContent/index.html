@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"  content="no-cache" charset="UTF-8">
+		<title>Seaco SEAWEB</title>
+
+		<script src="resources/sap-ui-core.js" type="text/javascript"
+				id="sap-ui-bootstrap"
+				data-sap-ui-libs="sap.m,sap.ui.unified,sap.ui.table,sap.ui.ux3,sap.ca.ui"
+				data-sap-ui-theme="sap_bluecrystal">
+		</script>
+
+		<link rel="stylesheet" href="css/stylesheet.css">
+		<link rel="stylesheet" href="css/standard.css">
+		<link rel="stylesheet" href="css/LoginStylesheet.css">
+
+		<script src="js/Login/LoginView.js"></script>
+		<script src="js/jsondata.js"></script>
+		<script src="js/utility.js"></script>
+		<script src="js/WelcomePageView.js"></script>
+
+		 <script>
+
+		  //check to find the system
+		 var HomeUrlHash = window.location.href.replace(window.location.hash,'');
+		 var urlSplitHome = HomeUrlHash.split('/');
+
+		 /* Service URLs */
+
+		 function getServiceUrl(sServiceUrl) {
+ 			//for local testing prefix with proxy
+ 			//if you and your team use a special host name or IP like 127.0.0.1 for localhost please adapt the if statement below
+ 			if (window.location.hostname == "localhost") {
+ 					return "proxy/" + sServiceUrl;
+ 			} else {
+ 					return sServiceUrl;
+ 			}
+ 		}
+		
+		 var auth_serviceUrl =  getServiceUrl("/sap/opu/odata/sap/ZNW_SEACO_PORTAL_SECROLE_PGW_SRV");
+		 var serviceUrl = getServiceUrl("/sap/opu/odata/sap/ZNW_SEACO_PORTAL_SECPGW1_4_SRV");
+		 var serviceUrl15 = getServiceUrl("/sap/opu/odata/sap/ZNW_SEACO_PORTAL_LOT5PGW_SRV");
+		 var serviceUrl15_old = getServiceUrl("/sap/opu/odata/sap/ZNW_SEACO_PORTAL_LOT5PGW_SRV");
+
+
+
+			sap.ui.localResources("view");
+			var page = sap.ui.view({id:"LoginView", viewName:"view.Login", type:sap.ui.core.mvc.ViewType.JS});
+
+			var busyDialog = (busyDialog) ? busyDialog : new sap.m.BusyDialog(
+			{
+				text : 'Please Wait',
+				customIcon : 'images/ajax-loader.gif',
+				title : 'Loading...'
+			});
+
+				/* var IDLE_TIMEOUT = 120; //seconds
+				var _idleSecondsCounter = 0;
+				document.onclick = function() {
+				    _idleSecondsCounter = 0;
+				};
+				document.onmousemove = function() {
+				    _idleSecondsCounter = 0;
+				};
+				document.onkeypress = function() {
+				    _idleSecondsCounter = 0;
+				};
+				window.setInterval(CheckIdleTime, 1000); */
+
+		</script>
+    		<!-- Section for service binding -->
+    		<script src="serviceBinding.js"></script>
+    		<script>
+    			initModel();
+    		</script>
+
+
+	</head>
+	<body  class="sapUiBody"  role="application">
+		<div class="panel">
+			<div id="loginForm"></div>
+		</div>
+	</body>
+</html>

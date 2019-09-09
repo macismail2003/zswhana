@@ -1,0 +1,505 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Seaco SEAWEB</title>
+<meta http-equiv="X-UA-Compatible" content="no-cache"  charset="UTF-8">
+<META HTTP-EQUIV="Pragma" content="no-cache" >
+<META HTTP-EQUIV="Expires" CONTENT="-1">
+
+<script>
+
+		//check to find the system
+		var HomeUrlHash = window.location.href.replace(window.location.hash,'');
+		var urlSplitHome = HomeUrlHash.split('/');
+		var excelDataAddOut = [];
+		var oExcelGridAddOut;
+		var excelDataAddIn = [];
+		var oExcelGridAddIn;
+		var oExcelGrid;
+		var excelData = [];
+
+		var oExcelGridJ1;
+		var excelDataJ1 = [];
+
+		var oExcelGridJ2;
+		var excelDataJ2 = [];
+
+		var menuClickedData = [];
+
+		var aMenuLinks = [];
+		var menuData = [];
+		var child = [];
+		var loggedInCustomer = "Customer";
+		var donutColor = ["#99cc33","#002E63","#cc292b"];
+		//var columnColor = ["#cc292b"];
+		var columnColor = ["#072a5e"];
+		var menuClickedTxt = "";
+		var objLoginUser;
+		var backendMenuJSON = [];
+
+		function getServiceUrl(sServiceUrl) {
+		 //for local testing prefix with proxy
+		 //if you and your team use a special host name or IP like 127.0.0.1 for localhost please adapt the if statement below
+		 if (window.location.hostname == "localhost") {
+				 return "proxy/" + sServiceUrl;
+		 } else {
+				 return sServiceUrl;
+		 }
+	 }
+
+		 /* Service URLs */
+		 var auth_serviceUrl = getServiceUrl("/sap/opu/odata/sap/ZNW_SEACO_PORTAL_SECROLE_PGW_SRV");
+		 var swbuser_serviceUrl = getServiceUrl("/sap/opu/odata/sap/ZSWB_USR_SRV");
+		 var serviceUrl = getServiceUrl("/sap/opu/odata/sap/ZNW_SEACO_PORTAL_SECPGW1_4_SRV");
+		 var serviceUrl15 = getServiceUrl("/sap/opu/odata/sap/ZNW_SEACO_PORTAL_LOT5PGW_SRV");
+		 var serviceUrl15_old = getServiceUrl("/sap/opu/odata/sap/ZNW_SEACO_PORTAL_LOT5PGW_SRV");
+		 var serviceUrlMove = getServiceUrl("/sap/opu/odata/sap/ZUI5_MOVEMENTNEW_SRV");
+		 var serviceEDIDOC = getServiceUrl('/sap/opu/odata/sap/ZEDI_SRV/');
+		 var serviceDEP = getServiceUrl('/sap/opu/odata/sap/ZMNR_DEP_SRV/');
+		 var globalMasterUserName = "";
+		 var globalMasterID = "";
+		 </script>
+
+<script src="/resources/sap-ui-core.js" id="sap-ui-bootstrap"
+	data-sap-ui-libs="sap.m,sap.ui.unified,sap.ui.table,sap.ui.ux3,sap.ca.ui,sap.ui.richtexteditor"
+	data-sap-ui-theme="sap_bluecrystal"
+	data-sap-ui-logLevel = "debug">
+</script>
+
+<script src="/sap/public/bc/ui2/shell-api/sap/ui2/shell/shell.js"></script>  
+		<script src="/sap/public/bc/ui2/services/sap/ui2/srvc/error.js"></script>  
+		<script src="/sap/public/bc/ui2/services/sap/ui2/srvc/utils.js"></script>  
+		<script src="/sap/public/bc/ui2/shell-api/sap/ui2/shell/startup.js"></script>
+
+		<script>
+				var oUser = sap.ui2.shell.getUser();  
+        		oUser.load({}, function(){
+					globalMasterUserName = oUser.getFullName();
+					globalMasterID = oUser.getId();  
+
+					sessionStorage.setItem("uName", globalMasterID);
+					sessionStorage.setItem("login", "success");
+						
+					console.log(oUser.getFullName());  
+					console.log(oUser.getId());
+				},  
+				function(sError){  
+					console.log('user fetching failed ' + sError );  
+				});
+	
+			</script>
+
+<link rel="stylesheet" href="css/newstyle.css">
+<link rel="stylesheet" href="css/stylesheet.css">
+<link rel="stylesheet" href="css/newstandard.css">
+<link rel="stylesheet" href="css/stylesheetmediumdevice.css">
+<link rel="stylesheet" href="css/stylesheetsmalldevice.css">
+
+
+
+<link rel="stylesheet" href="css/token-input.css" type="text/css" />
+<link rel="stylesheet" href="css/token-input-custom.css" type="text/css" />
+<link rel="stylesheet" href="css/jBox.css" type="text/css" />
+<!-- <link rel="stylesheet" href="css/handsontable.css"> -->
+<link href="css/handsontable.full.min.css" rel="stylesheet" />
+
+<link rel="stylesheet" href="css/pikaday.css">
+
+<!-- <script src="js/handsontable.full.js"></script> -->
+
+<!-- <script src="js/jquery223.js"></script> -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js" data-require="jquery@*" data-semver="2.2.0"></script> -->
+<script src="js/handsontable.full.min.js"></script>
+<script src="js/pikaday.js"></script>
+<script src="js/moment.js"></script>
+<script src="js/jBox/jBox.min.js"></script>
+<script type="text/javascript" src="js/globalize.js"></script>
+<script type="text/javascript" src="js/globalize.cultures.js"></script>
+
+<script src="js/excelGrid.js"></script>
+
+<script src="js/utility.js"></script>
+<script type="text/javascript" src="js/jquery.tokeninput.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.11.1/dojo/dojo.js"></script> -->
+<script src="js/MyJqueryUI.js"></script>
+<script src="js/dateFormatter.js"></script>
+<script src="js/loggedInUser.js"></script>
+<script src="js/jsondata.js"></script>
+<script src="js/Login/LoginView.js"></script>
+<script src="js/Autocomplete/AutoComplete.js"></script>
+<!-- <script src="js/Autocomplete/AutoCompleteRenderer.js"></script> -->
+<script src="js/Autocomplete/autocmpltExtend.js"></script>
+<script src="js/WelcomePageView.js"></script>
+
+<!--  Export to PDF-->
+<script src="js/jsPDF/jsexportutility.js"></script>
+<script src="js/jsPDF/jspdf.js"></script>
+<script src="js/jsPDF/jspdf.min.js"></script>
+<script src="js/jsPDF/jspdf.plugin.addimage.js"></script>
+<script src="js/jsPDF/jspdf.plugin.cell.js"></script>
+<script src="js/jsPDF/jspdf.plugin.from_html.js"></script>
+<script src="js/jsPDF/jspdf.plugin.ie_below_9_shim.js"></script>
+<script src="js/jsPDF/jspdf.plugin.javascript.js"></script>
+<script src="js/jsPDF/jspdf.plugin.sillysvgrenderer.js"></script>
+<script src="js/jsPDF/jspdf.plugin.split_text_to_size.js"></script>
+<script src="js/jsPDF/jspdf.plugin.standard_fonts_metrics.js"></script>
+<script src="js/jsPDF/jspdf.PLUGINTEMPLATE.js"></script>
+<script src="js/jsPDF/jspdf.source.js"></script>
+
+ <!-- Import from Excel -->
+<script src="js/xls.js"></script>
+
+
+<!-- Release -->
+	<script src="js/Releases/releaseSearch.js"></script>
+	<script src="js/Releases/releaseReferenceDetails.js"></script>
+	<script src="js/Releases/releaseAutoMulti.js"></script>
+<!-- Returns -->
+	<script src="js/Returns/returnSearch.js"></script>
+	<script src="js/Returns/returnReferenceDetails.js"></script>
+	<script src="js/Returns/returnAutoMulti.js"></script>
+<!-- Repair -->
+	<script src="js/RepairEstimates/repairEstimatesSearch.js"></script>
+	<script src="js/RepairEstimates/repairAutoMulti.js"></script>
+<!-- Inventory -->
+	<script src="js/Inventory/inventorySearch.js"></script>
+	<script src="js/Inventory/inventoryAutoMulti.js"></script>
+<!-- Inventory Reconciliation -->
+	<script src="js/InventoryRecon/inventoryReconSearch.js"></script>
+<!-- Depot Dashboard -->
+	<script src="js/DepotInventory/ChangDepotCode.js"></script>
+
+	<script src="js/DepotInventory/DepotDashboard.js"></script>
+	<script src="js/DepotInventory/CreateDashboard.js"></script>
+
+	<script src="js/DepotInventory/DashDepotInventory.js"></script>
+	<script src="js/DepotInventory/DashRepairInventory.js"></script>
+	<script src="js/DepotInventory/DashActiveRelease.js"></script>
+	<script src="js/DepotInventory/DashActiveReturn.js"></script>
+	<script src="js/DepotInventory/DashEDI.js"></script>
+	<script src="js/DepotInventory/DashMNR.js"></script>
+
+	<script src="js/DepotInventory/DepotInventoryAVLB.js"></script>
+	<script src="js/DepotInventory/DepotInventoryHOLD.js"></script>
+	<script src="js/DepotInventory/DepotInventoryREPA.js"></script>
+	<script src="js/DepotInventory/DepotInventorySALE.js"></script>
+	<script src="js/DepotInventory/DepotInventoryStatus.js"></script>
+
+	<script src="js/DepotInventory/RepairInventoryAUTH.js"></script>
+	<script src="js/DepotInventory/RepairInventoryAWAP.js"></script>
+	<script src="js/DepotInventory/RepairInventoryWEST.js"></script>
+	<script src="js/DepotInventory/RepairInventoryStatus.js"></script>
+
+	<script src="js/DepotInventory/ActiveReleaseDetails.js"></script>
+	<script src="js/DepotInventory/ActiveReturnDetails.js"></script>
+<!-- Approve DN JS  -->
+	<script src="js/DN_JS/DN_JSView.js"></script>
+	<script src="js/DN_JS/DNJSPrimaryDetails.js"></script>
+
+	<script src="js/DN_JS/LAView.js"></script>
+	<script src="js/DN_JS/LAPrimaryDetail.js"></script>
+	<script src="js/DN_JS/LAPrimaryImage.js"></script>
+	<script src="js/DN_JS/LAMultiple.js"></script>
+
+	<script src="js/DN_JS/DNJSAutoMulti.js"></script>
+
+	<!-- RN Start -->
+
+	<script src="js/InventoryOverview/SelectionChangeEvents.js"></script>
+
+	<script src="js/ECCDocs/AccountsSummaryView.js"></script>
+	<script src="js/ECCDocs/DepotSpecificDocsView.js"></script>
+	<script src="js/ECCDocs/PaymentAdvise.js"></script>
+
+	<script src="js/UnitEnquiry/UnitEnquiry.js"></script>
+	<script src="js/UnitEnquiry/ContainerDetails.js"></script>
+	<script src="js/UnitEnquiry/UnitEnquirySpecifications.js"></script>
+	<script src="js/UnitEnquiry/FullSpecificationBoxes.js"></script>
+	<script src="js/UnitEnquiry/FullSpecificationReefers.js"></script>
+	<script src="js/UnitEnquiry/FullSpecificationTanks.js"></script>
+
+	<!-- RN Online Returns start   -->
+	<script src="js/OnlineReturns/OnlineReservationView.js"></script>
+	<script src="js/OnlineReturns/OnlineReturnsSelectUnitsView.js"></script>
+	<script src="js/OnlineReturns/OnlineReturnsView.js"></script>
+	<script src="js/OnlineReturns/OnlineReturnsResult.js"></script>
+	<script src="js/OnlineReturns/ReturnDetailsView.js"></script>
+	<script src="js/OnlineReturns/getOnLoadData.js"></script>
+	<!--  CR online Return includes -->
+	<script src="js/OnlineReturns/EditReturns/RASearchView.js"></script>
+	<script src="js/OnlineReturns/EditReturns/EDReturnDetailsView.js"></script>
+	<script src="js/OnlineReturns/EditReturns/AddReturns.js"></script>
+	<!-- RN Online Returns end  -->
+
+	<!-- RN DRV  start  -->
+	<script src="js/DRV/DepReplValueView.js"></script>
+	<script src="js/DRV/DepotInventoryForRepairView.js"></script>
+	<!-- RN DRV end  -->
+
+	<!-- RN Buyer  start  -->
+	<script src="js/SaleInventory/SaleInventoryOverview.js"></script>
+	<script src="js/SaleInventory/SaleInventoryCityDetails.js"></script>
+	<script src="js/SaleInventory/SaleInventoryMakeOffer.js"></script>
+	<script src="js/SaleInventory/OutstandingReleasesView.js"></script>
+	<script src="js/SaleInventory/OutstandingReleaseDetails.js"></script>
+	<script src="js/SaleInventory/OutstandingPaymentCredit.js"></script>
+	<script src="js/SaleInventory/OutstandingPaymentCash.js"></script>
+	<script src="js/SaleInventory/OutstandingPayDetailsCredit.js"></script>
+	<script src="js/SaleInventory/OutstandingPayDetailsCash.js"></script>
+	<script src="js/SaleInventory/ViewSalePictures.js"></script>
+	<script src="js/SaleInventory/GetOnLoadDataForSaleInvOvrvw.js"></script>
+	<script src="js/SaleInventory/ValidationNResetSI.js"></script>
+	<script src="js/SaleInventory/OutstandingPaymentView.js"></script>
+	<!-- RN Buyer  end  -->
+
+	<!-- CR customer Dashboard PMR -->
+	<script src="js/CustomerDashboardReport/CustDashReport_PMRView.js"></script>
+	<!-- RN End  -->
+
+	<!-- Find Depot start -->
+		<script src="js/FindDepot/PortsDeportsView.js"></script>
+		<script src="js/FindDepot/DepotInformation.js"></script>
+		<script src="js/FindDepot/DepotInformationExport.js"></script>
+		<script src="js/FindDepot/GetDataOnLoadFD.js"></script>
+		<script src="js/FindDepot/ResetFormFD.js"></script>
+		<!-- Find Depot end -->
+
+		<!-- Map Start -->
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+		<!-- Map End -->
+
+	<!-- Reqmnt 15 includes  -->
+	<!--  Lessee Approval - Fix Partial Updates-->
+	<script src="js/FixPartialUpdate/LesseeApproval/LesseeApproval.js"></script>
+	<script src="js/FixPartialUpdate/LesseeApproval/ErrorProcessingLAFPU.js"></script>
+	<script src="js/FixPartialUpdate/GateOut/ErrorProcessingMOTL.js"></script>
+	<script src="js/FixPartialUpdate/GateOut/MoveOutToLease.js"></script>
+	<script src="js/FixPartialUpdate/RepairCompletion/Repaircompletion.js"></script>
+	<script src="js/FixPartialUpdate/RepairCompletion/ErrorProcessingRCFPU.js"></script>
+	<script src="js/FixPartialUpdate/GateIn/GateIn.js"></script>
+	<script src="js/FixPartialUpdate/GateIn/ErrorProcessingMIFPU.js"></script>
+
+
+	<script src="js/DepotDailyActivities/RepairEstimate/ZeroCostEstimateMultipleView.js"></script>
+	<script src="js/DepotDailyActivities/RepairEstimate/ZeroCostEstimateMultipleResultsView.js"></script>
+	<!-- RN Lessee Approval Start  -->
+	<script src="js/DepotDailyActivities/LesseeApproval/LesseApprovalSingleView.js"></script>
+	<script src="js/DepotDailyActivities/LesseeApproval/LesseeApprovalMultipleView.js"></script>
+	<script src="js/DepotDailyActivities/LesseeApproval/LesseeApprovalMultResult.js"></script>
+	<!-- RN Lessee Approval End  -->
+
+	<!-- EDI Start  -->
+		<script src="js/Logs/EDI/EDITransmissionLogView.js"></script>
+		<script src="js/Logs/EDI/EDIAllDepotView.js"></script>
+		<script src="js/Logs/EDI/FailMessageDetailView.js"></script>
+		<script src="js/Logs/EDI/ViewErrorsView.js"></script>
+		<script src="js/Logs/EDI/MessageUniqueIDView.js"></script>
+		<script src="js/Logs/EDI/MessageUniqueIDDetailsView.js"></script>
+		<script src="js/Logs/EDI/CEDEXTransmissionLogView.js"></script>
+
+	<!-- EDI End  -->
+
+	<!--RN EDI Status U Messages start  -->
+	<script src="js/EDIStatusU/StatusUSearchView.js"></script>
+	<script src="js/EDIStatusU/StatusUResultView.js"></script>
+	<!--RN EDI Status U Messages end  -->
+
+	<!-- RN Fix Partial Updates start  -->
+	<script src="js/FixPartialUpdate/RepairCompletion/Repaircompletion.js"></script>
+	<script src="js/FixPartialUpdate/RepairCompletion/ErrorProcessingRCFPU.js"></script>
+	<!-- RN Fix Partial Updates end  -->
+
+	<!--RN Repair Completion start  -->
+	<script src="js/RepairCompletion/RepairCompletionMultipleView.js"></script>
+	<script src="js/RepairCompletion/RepairCompletionSingleView.js"></script>
+	<script src="js/RepairCompletion/RepairCompltnMultipleResults.js"></script>
+	<!--RN Repair Completion end  -->
+
+	<!--RN Portal Processing Logs start  -->
+		<script src="js/Logs/PortalProcsngLogsView.js"></script>
+	<!--RN Portal Processing Logs end  -->
+
+    <!-- NP Start (Movement Management) -->
+	<script src="js/DepotDailyActivities/MovementManagement/AddMovementSingle.js"></script>
+	<script src="js/DepotDailyActivities/MovementManagement/AddMovementMultiple.js"></script>
+	<script src="js/DepotDailyActivities/MovementManagement/AddMovementMultipleResults.js"></script>
+	<script src="js/DepotDailyActivities/MovementManagement/AddMovementInSingle.js"></script>
+	<script src="js/DepotDailyActivities/MovementManagement/AddMovementInMultiple.js"></script>
+	<script src="js/DepotDailyActivities/MovementManagement/AddMovementInMultipleNew.js"></script>
+	<script src="js/DepotDailyActivities/MovementManagement/AddMovementOutMultipleNew.js"></script>
+	<script src="js/DepotDailyActivities/MovementManagement/TankDetailsInMultiple.js"></script>
+	<script src="js/DepotDailyActivities/MovementManagement/ValidateMovementInMultiple.js"></script>
+	<script src="js/DepotDailyActivities/MovementManagement/ValidateMovementInMultipleNew.js"></script>
+	<script src="js/DepotDailyActivities/MovementManagement/ValidateMovementOutMultipleNew.js"></script>
+	<script src="js/DepotDailyActivities/MovementManagement/SubmitMovementInMultiple.js"></script>
+	<!-- NP End  -->
+
+	<!-- NP Start (Customer Dashboard) -->
+        <script src="js/CustomerDashboardReport/CustReportUnitsOnLeaseView.js"></script>
+        <script src="js/CustomerDashboardReport/CustReportUnitsOffHireView.js"></script>
+        <script src="js/CustomerDashboardReport/GetDataOnLoadForCRUOH.js"></script>
+        <script src="js/CustomerDashboardReport/GetDataOnLoadForCRUOL.js"></script>
+    <!-- NP End  -->
+
+
+		<!-- EDI Process -->
+			<script src="js/EdiProcess/FUPL/fupl.js"></script>
+			<script src="js/EdiProcess/FGIN/fgin.js"></script>
+			<script src="js/EdiProcess/FGOU/fgou.js"></script>
+			<script src="js/EdiProcess/FRCN/frcn.js"></script>
+			<script src="js/EdiProcess/FLSA/flsa.js"></script>
+			<script src="js/EdiProcess/FEST/fest.js"></script>
+			<script src="js/EdiProcess/FSUM/fsum.js"></script>
+			<script src="js/EdiProcess/FSUM/fdet.js"></script>
+			<script src="js/EdiProcess/FSUM/fserdet.js"></script>
+			<script src="js/EdiProcess/FSUM/flog.js"></script>
+			<script src="js/EdiProcess/FSUM/fheaderdet.js"></script>
+			<script src="js/EdiProcess/FSUM/festsum.js"></script>
+			<script src="js/EdiProcess/FSUM/festsumlsa.js"></script>
+
+	<!-- M&R Customer Dashboard -->
+		<script src="js/cdashm/cdashm1.js"></script>
+		<script src="js/cdashm/cdashm2.js"></script>
+		<script src="js/cdashm/cdashmpic.js"></script>
+		<script src="js/cdashm/cdashm2doc.js"></script>
+		<script src="js/cdashm/cdashmdata.js"></script>
+
+
+		<script src="js/Userreg/Userreg.js"></script>
+
+		
+		<script>
+	
+	
+
+		sap.ui.localResources("js");
+		jQuery.sap.require("sap.ui.commons.MessageBox");
+		jQuery.sap.require("sap.m.MessageToast");
+
+
+//BG
+jQuery.sap.require("js.UploadFiles.UploadSingleCertificate");
+jQuery.sap.require("js.UploadFiles.UploadMultipleCertificate");
+jQuery.sap.require("js.UploadFiles.UploapNewBuildPict");
+jQuery.sap.require("js.UploadFiles.UploadDNPicturesView");
+jQuery.sap.require("js.UploadFiles.UploadDNPicturesSales");
+
+//REQ 11_20_22
+jQuery.sap.require("js.customerdashboard.ChangCustomerDashBoard");
+jQuery.sap.require("js.customerdashboard.customerDashboard");
+jQuery.sap.require("js.customerdashboard.customerDBoardOnHiredDtl");
+jQuery.sap.require("js.customerdashboard.customerDBoardOffHiredDtl");
+jQuery.sap.require("js.customerdashboard.CustomerDashBoardRelease");
+jQuery.sap.require("js.customerdashboard.CustomerDashBoardReturn");
+
+//REQ 7
+jQuery.sap.require("js.seacopublications.seacoPublications");
+
+//RE 15
+jQuery.sap.require("js.DepotDailyActivities.CorrectMovement.CorrectMovementDate");
+jQuery.sap.require("js.DepotDailyActivities.RepairEstimate.RepairEstimateStaticData");
+jQuery.sap.require("js.DepotDailyActivities.RepairEstimate.RepairEstimateOnline");
+jQuery.sap.require("js.DepotDailyActivities.RepairEstimate.RepairEstimateEntry");
+jQuery.sap.require("js.DepotDailyActivities.RepairEstimate.RepairEstimateSearch");
+jQuery.sap.require("js.DepotDailyActivities.RepairEstimate.RepairEstimateSearchJ");
+jQuery.sap.require("js.DepotDailyActivities.RepairEstimate.RepairEstimateOnlineJ");
+jQuery.sap.require("js.DepotDailyActivities.RepairEstimate.RepairEstimateEntryJ");
+jQuery.sap.require("js.DepotDailyActivities.RepairEstimate.RepairEstimateEntryReferJS");
+
+//CR CUSTOMER DASHBOARD
+jQuery.sap.require("js.CustomerDashboardReport.CustDashOutRelReport");
+jQuery.sap.require("js.CustomerDashboardReport.CustDashOutReturnReport");
+
+//FIX PARTIAL REPAIR ESTIMATE
+jQuery.sap.require("js.FixPartialUpdate.RepairEstimateFPUpdate.FixPartialRepairEstimateSearch");
+jQuery.sap.require("js.FixPartialUpdate.RepairEstimateFPUpdate.FixPartialRepairEstimateOnline");
+jQuery.sap.require("js.FixPartialUpdate.RepairEstimateFPUpdate.FixPartialRepairEstimateShow");
+
+
+</script>
+	<script>
+	// try {
+	// 	sap.ui.getCore().loadLibrary("sap.ui.commons");
+	// } catch (e) {
+	// 	alert("This test page requires the library 'sap.ui.commons' which is not available.");
+	// 	throw (e);
+	// }
+	var busyDialog = (busyDialog) ? busyDialog : new sap.m.BusyDialog('busy',
+	{
+		text : 'Please Wait',
+		customIcon : 'images/ajax-loader.gif',
+		title : 'Loading...'
+	});
+
+			var appedi = new sap.m.App();
+			var appuserreg = new sap.m.App();
+			var widthOfDoc = $(window).width();
+			var objUtil = new utility();
+			objUtil.loadApp();
+
+			var IDLE_TIMEOUT = 3600; //seconds
+			var _idleSecondsCounter = 0;
+			document.onclick = function() {
+			    _idleSecondsCounter = 0;
+			};
+			document.onmousemove = function() {
+			    _idleSecondsCounter = 0;
+			};
+			document.onkeypress = function() {
+			    _idleSecondsCounter = 0;
+			};
+			window.setInterval(CheckIdleTime, 2000);
+</script>
+
+</head>
+<body class="sapUiBody" role="application">
+	<header class="hdrcustm">
+		<ul>
+			<li class="logo" onclick="objUtil.toggleMenu();">
+				<a href="javascript:void(0);"
+							title="Menu"> <img id="slider"
+								src="images/hidemenu1.png" alt="Menu">
+
+				</a>
+			</li>
+
+		<!-- Logo -->
+		<a class="strap">
+			<!--  <img src="images/seacologo.png" />-->
+			<img src="images/Seaco_HNA_combined.png" />
+		</a>
+		<!--  <a class="strap" href="javascript:void(0);" title="" data-pane="Hna">
+				<img src="images/hna_strap.jpg">
+		</a>	-->
+		</ul>
+		<div style="width:500px;" class="hdrContent" id="idHdrContnt"></div>
+		<div id="extra">
+			<ul class="extra">
+				<li id="liProfilethmnu" style="border-left: 0px;"><a
+					href="javascript:void(0);" title="Profile" data-pane="User">
+<!-- 						<div style="float: left; padding-top: 5px">
+							<img src="images/menu/Header_user.png" alt="Home">
+						</div>
+ -->						<div style="float: right;">
+							 <div id="idLoggedInUserArea"></div>
+						</div>
+				</a></li>
+
+				<!-- <li id="liSettingthmnu"><a href="javascript:void(0);"
+					title="Setting" data-pane="Setting"> <img
+						src="images/menu/Header_Setting.png" alt="Setting">
+						<p>Setting</p></a></li> -->
+
+
+				<!-- <li id="liLogoutthmnu" onclick="objUtil.logoutclick();"><a href="javascript:void(0);"
+					title="Logout" data-pane="Logout"> <img
+						src="images/menu/Header_logout.png" alt="Logout">
+						<p>Logout</p>
+				</a></li> -->
+				
+			</ul>
+		</div>
+	</header>
+	<div id="wrapper"></div>
+</body>
+</html>

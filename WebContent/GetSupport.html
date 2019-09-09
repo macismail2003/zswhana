@@ -1,0 +1,148 @@
+<!--
+Information: This file is copied from PGW on 26.09.2014 by Seyed Ismail from Chrome Console
+			 and the changes to this file are marked as MAC26092014
+*$*$------------------------------------------------------------------------*
+*$*$ Modified By : Seyed Ismail MAC
+*$*$ Modified On : 26.09.2014
+*$*$ Reference   : P1 CR#11
+*$*$ Transport   :
+*$*$ Tag         : MAC26092014
+*$*$ Purpose     : Get Support Page
+*$*$---------------------------------------------------------------------
+ -->
+
+<!DOCTYPE HTML>
+<html>
+<head>
+
+<meta http-equiv="X-UA-Compatible" content="no-cache">
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Expires" CONTENT="-1">
+
+ <script>
+
+function getServiceUrl(sServiceUrl) {
+ 			//for local testing prefix with proxy
+ 			//if you and your team use a special host name or IP like 127.0.0.1 for localhost please adapt the if statement below
+ 			if (window.location.hostname == "localhost") {
+ 					return "proxy/" + sServiceUrl;
+ 			} else {
+ 					return sServiceUrl;
+ 			}
+		 }
+		 
+		var auth_serviceUrl = getServiceUrl("/sap/opu/odata/sap/ZNW_SEACO_PORTAL_SECROLE_PGW_SRV");
+		var serviceUrl = getServiceUrl("/sap/opu/odata/sap/ZNW_SEACO_PORTAL_SECPGW1_4_SRV");
+		var serviceUrl15 = getServiceUrl("/sap/opu/odata/sap/ZNW_SEACO_PORTAL_LOT5PGW_SRV");
+		var serviceUrl15_old = getServiceUrl("/sap/opu/odata/sap/ZNW_SEACO_PORTAL_LOT5PGW_SRV");
+
+		 </script>
+<!-- <title>SEACO SEAWEB</title> -->
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<script src="resources/sap-ui-core.js" id="sap-ui-bootstrap"
+	data-sap-ui-libs="sap.m,sap.ui.unified,sap.viz,sap.ui.table,sap.ui.ux3,sap.ca.ui"
+	data-sap-ui-theme="sap_bluecrystal">
+</script>
+<link rel="stylesheet" href="css/jquery-ui.css">
+<link rel="stylesheet" href="css/newstyle.css">
+<link rel="stylesheet" href="css/stylesheet.css">
+<link rel="stylesheet" href="css/newstandard.css">
+<link rel="stylesheet" href="css/stylesheetmediumdevice.css">
+<link rel="stylesheet" href="css/stylesheetsmalldevice.css">
+<link rel="stylesheet" href="css/token-input.css" type="text/css" />
+<link rel="stylesheet" href="css/token-input-custom.css" type="text/css" />
+<script src="js/utility.js"></script>
+<script type="text/javascript" src="js/jquery.tokeninput.js"></script>
+<script src="js/MyJqueryUI.js"></script>
+<script src="js/dateFormatter.js"></script>
+<script src="js/loggedInUser.js"></script>
+<script src="js/jsondata.js"></script>
+
+<!-- <script src="js/login/loginview.js"></script>
+<script src="js/login/getsupport.js"></script>
+<script src="js/login/changepassword.js"></script>
+<script src="js/utility.js"></script> -->
+	<script src="js/Login/LoginView.js"></script>
+<script src="js/GetSupport/GetSupportExistingUserView.js"></script>
+<script src="js/GetSupport/GetSupportNewUserView.js"></script>
+
+
+<script>
+
+
+
+sap.ui.localResources("js");
+jQuery.sap.require("sap.ui.commons.MessageBox");
+jQuery.sap.require("sap.m.MessageToast");
+
+
+
+	try {
+		sap.ui.getCore().loadLibrary("sap.ui.commons");
+	} catch (e) {
+		alert("This test page requires the library 'sap.ui.commons' which is not available.");
+		throw (e);
+	}
+	var busyDialog = (busyDialog) ? busyDialog : new sap.m.BusyDialog('busy',
+	{
+		text : 'Please Wait',
+		customIcon : 'images/ajax-loader.gif',
+		title : 'Loading...'
+	});
+
+			var widthOfDoc = $(window).width();
+			var objUtil = new utility();
+			objUtil.loadAppGS();
+</script>
+
+</head>
+<body class="sapUiBody" role="application">
+	<header class="hdrcustm">
+		<ul>
+			<li class="logo" onclick="objUtil.toggleMenu();">
+				<a href="javascript:void(0);"
+							title="Menu"> <img id="slider"
+								src="images/hidemenu1.png" alt="Menu">
+
+				</a>
+			</li>
+
+		<!-- Logo -->
+    <a class="strap">
+			<!--  <img src="images/seacologo.png" />-->
+			<img src="images/Seaco_HNA_combined.png" />
+		</a>
+		<!--  <a class="strap" href="javascript:void(0);" title="" data-pane="Hna">
+				<img src="images/hna_strap.jpg">
+		</a>	-->
+		</ul>
+		<div style="width:500px;" class="hdrContent" id="idHdrContnt"></div>
+		<div id="extra">
+			<ul class="extra">
+				<li id="liProfilethmnu" style="border-left: 0px;"><a
+					href="javascript:void(0);" title="Profile" data-pane="User">
+<!-- 						<div style="float: left; padding-top: 5px">
+							<img src="images/menu/Header_user.png" alt="Home">
+						</div>
+ -->						<div style="float: right;">
+							 <div id="idLoggedInUserArea"></div>
+						</div>
+				</a></li>
+
+				<!-- <li id="liSettingthmnu"><a href="javascript:void(0);"
+					title="Setting" data-pane="Setting"> <img
+						src="images/menu/Header_Setting.png" alt="Setting">
+						<p>Setting</p></a></li> -->
+
+
+				<li id="liLogoutthmnu" onclick="objUtil.exitGetSupport();"><a href="javascript:void(0);"
+					title="Logout" data-pane="Logout"> <img
+						src="images/menu/Header_logout.png" alt="Logout">
+						<p>Exit</p>
+				</a></li>
+			</ul>
+		</div>
+	</header>
+	<div id="wrapper"></div>
+</body>
+</html>

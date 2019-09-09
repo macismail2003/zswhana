@@ -1,0 +1,334 @@
+.sapUiRespGridMedia-Std-Tablet.sapUiFormResGridMain>div:not(.sapUiRespGridBreakM):not(.sapUiRespGridSpanM12), .sapUiRespGridMedia-Std-Desktop.sapUiFormResGridMain>div:not(.sapUiRespGridBreakL):not(.sapUiRespGridSpanL12) {
+     padding-left: 0rem !important;
+    -moz-box-sizing: padding-box;
+    box-sizing: border-box;
+}
+
+.sapUiFormM .sapUiRespGrid.sapUiRespGridVSpace0>div {
+    /*padding-bottom: 0;*/
+}
+
+/* MACHANACHANGES_12062019+ */
+.sapUiTfErr.sapUiTfStd {
+       background-color: #f8c1c1;
+}
+/* MACHANACHANGES_12062019+ */
+
+/***************************************************************************/
+/***************************************************************************/
+/******************************* Auto Complete******************************/
+/***************************************************************************/
+/***************************************************************************/
+/* AUTOCOMPLETE VALUE HOLDER*/
+.autoCompleteValueHolder_valueLayout {
+       border-radius: 4px;
+       border-width: 1px;
+       border-style: solid;
+       border-color: #bbbbbb;
+       background:#dadada;
+       padding-left: 1px;
+       padding-right: 3px;
+       margin-top: 1.2px;
+       color: #707277;
+       font: 12px arial,sans-serif;
+       /*height: 16px;
+       margin-bottom: 2px;*/
+       margin-left: 2px;
+}
+
+.autoCompleteValueHolder_valuesLayout {
+       border-radius: 4px !important;
+       /* padding-left: 2px; */
+       box-sizing: border-box;
+       -moz-box-sizing: border-box;
+       border: 1px solid #bfbfbf;
+       -webkit-border-radius: 0;
+       /* background: #ffffff; */
+       width: 100%;
+}
+
+.autoCompleteValueHolder_valuesLayoutScroll {
+	overflow: auto;
+        height:47px;
+}
+
+.redBackgrond{
+       background-color: #FAD4D4 !important;
+}
+.redBorder{
+       border-color: #e52929 !important;
+}
+.autoCompleteValueHolder_valueImage {
+       padding: 4px 0px 5px 4px;
+}
+
+.autoCompleteValueHolder_valueField {
+       padding: 0px 0px 0px 0px;
+       background: transparent;
+       border-width: 0px;
+       /* font-size: 10px; */
+       margin-top: -4px;
+       margin-left: 3px;
+}
+
+.autoCompleteValueHolder_valueFieldDiv {
+       /* width: 100px; BY BHASKAR*/
+       height: 20px;
+       overflow-x: hidden;
+       overflow-y: hidden;
+       text-overflow: ellipsis;
+       white-space: nowrap;
+       padding-top: 3px;
+}
+
+.autoCompleteValueHolder_search {
+       border: 0px !important;
+       padding-left: 5px !important;
+}
+
+.autoCompleteValueHolder_search:hover {
+       border: 0px !important;
+       border-color: #ffffff !important;
+       outline: none !important;
+}
+.height25{
+       height: 25px;
+}
+
+/***************************************************************************/
+/***************************************************************************/
+/******************************* Form **************************************/
+/***************************************************************************/
+/***************************************************************************/
+
+.sapUiRFL {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    background-color: rgb(246,246,246);
+}
+
+.sapUiFormResLayout>div {
+    /*background-color: rgba(255,255,255,0.8);*/
+    background-color: rgb(246,246,246);
+    padding: 1rem;
+    -moz-box-sizing: padding-box;
+    box-sizing: border-box;
+}
+
+/***************************************************************************/
+/***************************************************************************/
+/******************************* Body **************************************/
+/***************************************************************************/
+/***************************************************************************/
+
+.sapMPage{
+	background-color: rgb(246,246,246);
+}
+
+/***************************************************************************/
+/***************************************************************************/
+/******************************* Tree **************************************/
+/***************************************************************************/
+/***************************************************************************/
+
+.sapUiTreeList {
+       padding-left: 0px ;
+       padding-right: 0px;
+
+}
+
+.sapUiTree, .sapUiTreeHeader, .sapUiTreeCont{
+       background: transparent;
+}
+
+.sapUiTreeNodeContent{
+       padding: 10px 4px 10px;
+       border-bottom: 0px solid #e6e6e6;
+       font-size: 14px;
+       /*font:12px arial,sans-serif ;*/
+       color: rgb(7,42,94) !important;
+       font-weight: bolder !important;
+}
+
+.sapUiTreeNode:hover, .sapUiTreeNodeContent:hover{
+              background-color: rgb(246,246,246);
+              /*font:12px arial,sans-serif; */  /*  PT Lot 2*/
+              font-size: 14px;
+              color: rgb(7,42,94) !important;
+              background-image:none;
+              font-weight: bolder !important;
+}
+
+
+.sapUiTreeNode, .sapUiTreeNodeContent{
+              background-image:none;
+}
+
+
+.sapUiTreeNodeExpanded, .sapUiTreeHiddenChildrenNodes{
+       background-color: #FEFEFE;
+       padding-left: 34px; /* PT Lot 3*/
+}
+
+.sapUiTreeNode, .sapUiTreeNode.sapUiTreeNodeCollapsed{
+       border-bottom: 2px solid #e6e6e6;
+       background-color: rgb(246,246,246);
+       padding-left: 0px;
+}
+.sapUiTreeNodeSelectedParent, .sapUiTreeNodeSelected .sapUiTreeNodeContent {
+        background-color: rgb(246,246,246);
+        font: 14px;
+        /*font:12px arial,sans-serif;*/  /*  PT Lot 2*/
+        /*color: #FFFFFF;*/
+}
+
+.sapUiTreeIcon{
+              margin-right: 4px;
+              width: 20px;
+              position: relative;
+              top: 3px;
+}
+  .sapUiTreeNodeCollapsed{
+       border: 2px solid transparent;
+       /*color:white;*/
+}
+
+.sapUiTreeNodeCollapsed.sapUiTreeNode:Hover, .sapUiTreeNodeExpanded.sapUiTreeNode:Hover{
+       background-color: rgb(246,246,246);
+       background-image: none !important;
+       font: 14px;
+       /*font: 12px arial,sans-serif;*/  /*  PT Lot 2*/
+       /*color: #FFFFFF;*/
+}
+/* .sapUiTreeNodeSelected{
+       background-color:#cc292b;
+       font:13px arial,sans-serif ;
+       color: white;
+       border-bottom: 1px solid #e6e6e6;
+}  border: 2px solid transparent;*/
+
+.sapUiTreeNodeExpanded.sapUiTreeNodeSelectedParent:Hover, .sapUiTreeNodeExpanded.sapUiTreeNodeSelected:Hover, .sapUiTreeNodeExpanded.sapUiTreeNode:Hover {
+background-color: none !important;
+/*color: #ffffff;*/
+background-image: none !important;
+}
+
+/* to remove dotted border on select */
+.sapUiTreeNode:focus{
+	outline: 0px dashed #007cc0 !important;
+}
+
+.sapUiUfdSpltContPane {
+    background-color: white !important;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+/***************************************************************************/
+/***************************************************************************/
+/******************************* Label and Link ****************************/
+/***************************************************************************/
+/***************************************************************************/
+
+.sapUiLbl {
+/*color:#707277;*/
+/*font:12px arial,sans-serif ;*/
+color : rgb(7,42,94);
+font-size:14px;
+font-weight: bold;
+}
+
+.sapUiLnk:link{
+	color:#cc292b;
+}
+.sapUiLnk:visited {
+color: #00679e !important;
+}
+
+.sapUiLbl.sapUiLblReqEnd:after, .sapUiLbl.sapUiLblReqBeg:before{
+content: '*';
+color: #cc292b !important;
+font-size: 18px;
+font-weight: bold;
+vertical-align: middle;
+}
+
+/***************************************************************************/
+/***************************************************************************/
+/******************************* Font Title ********************************/
+/***************************************************************************/
+/***************************************************************************/
+
+.sapUiForm .sapUiFormTitle {
+    border-width: 0.0625rem;
+    font-family: Arial,Helvetica,sans-serif;
+    font-weight: normal;
+    color: rgb(7,42,94);
+}
+
+.sapUiTvH5{
+	border-width: 0.0625rem;
+    font-family: Arial,Helvetica,sans-serif;
+    font-weight: bold;
+    color: rgb(7,42,94);
+}
+
+/***************************************************************************/
+/***************************************************************************/
+/******************************* Text View ********************************/
+/***************************************************************************/
+/***************************************************************************/
+
+.sapUiTf:not(.sapUiTfInner) {
+        width: 100% !important;
+}
+
+/***************************************************************************/
+/***************************************************************************/
+/******************************* List Header********************************/
+/***************************************************************************/
+/***************************************************************************/
+
+.sapMListHdr{
+	color: rgb(7,42,94);
+    font: 15px arial,sans-serif !important;
+    font-weight: bold !important;
+}
+
+/***************************************************************************/
+/***************************************************************************/
+/******************************* HyperLink  ********************************/
+/***************************************************************************/
+/***************************************************************************/
+
+.sapUiLnk:link{
+  color:#cc292b;
+}
+.sapUiLnk:visited {
+  color: #00679e !important;
+}
+
+.sapMLnk{
+	color:#cc292b !important;
+	font:12px arial,sans-serif ;
+}
+
+.sapMLnk:hover {
+	color: #cc292b !important;
+}
+
+.sapMLnk:visited {
+	color: #00679e !important;
+}
+
+.visited{
+	color: blue !important;
+}
