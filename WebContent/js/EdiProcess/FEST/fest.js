@@ -3207,9 +3207,13 @@ if(final == "X"){
 
 									foundDamage = isInArrayLineCodes(oFESTExcelData[i][2], damageSource);
 									console.log(foundDamage);
-
-									foundMaterial = isInArrayLineCodes(oFESTExcelData[i][3], materialSource);
-									console.log(foundMaterial);
+									
+									if(oFESTExcelData[i][3] != null && oFESTExcelData[i][3] != ""){
+										foundMaterial = isInArrayLineCodes(oFESTExcelData[i][3], materialSource);
+										console.log(foundMaterial);
+									}else{
+										foundMaterial = true;
+									}
 
 									foundRepair = isInArrayLineCodes(oFESTExcelData[i][4], repairSource);
 									console.log(foundRepair);
