@@ -383,7 +383,7 @@ sap.ui.model.json.JSONModel.extend("utility", {
 		      // oCurrent.createScreenMenufromJSON(testJSON,oCurrent);
 			  setTimeout(function(){	// MACHANACHANGES_12062019+
 				var userId = sessionStorage.getItem("uName");//"ztest_bu"; //sap.ui.getCore().byId("idtxtUsername").getValue();
-				console.log('Wait is over : 2.5 seconds');	// MACHANACHANGES_12062019+
+				console.log('Wait is over : 2.5 seconds now');	// MACHANACHANGES_12062019+
 
 				console.log("utility.js line 385 :  ", userId);	// MACHANACHANGES_12062019+
 		       //var filter = ";mo/Authorization_Check_cgw?$filter=Bname eq '"+userId+"' and Password eq ''";
