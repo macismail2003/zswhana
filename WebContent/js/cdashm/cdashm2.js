@@ -704,13 +704,13 @@ sap.ui.model.json.JSONModel.extend("CDASHM2", {
 				textAlign: "Left"
 			}).bindProperty("text", "label1").addStyleClass("borderStyle1 boldText"),
 			resizable: false,
-			width: "40px"
+			width: "auto"
 		})).addStyleClass("wraptext");
 
 		oCDASHM2TableRecordDetails.addColumn(new sap.ui.table.Column({
 			template: oCDASHM2RecordDetailsValueRecordTypeTop,
 			resizable: false,
-			width: "60px"
+			width: "auto"
 		}));
 
 		oCDASHM2TableRecordDetails.addColumn(new sap.ui.table.Column({
@@ -719,7 +719,7 @@ sap.ui.model.json.JSONModel.extend("CDASHM2", {
 				textAlign: "Left"
 			}).bindProperty("text", "label2").addStyleClass("borderStyle1 boldText"),
 			resizable: false,
-			width: "40px"
+			width: "auto"
 		})).addStyleClass("wraptext");
 
 		oCDASHM2TableRecordDetails.addColumn(new sap.ui.table.Column({
@@ -728,7 +728,7 @@ sap.ui.model.json.JSONModel.extend("CDASHM2", {
 				textAlign: "Left"
 			}).bindProperty("text", "value2").addStyleClass("borderStyle1"),
 			resizable: false,
-			width: "40px"
+			width: "auto"
 		})).addStyleClass("wraptext");
 
 		oCDASHM2TableRecordDetails.addColumn(new sap.ui.table.Column("idCDASHM2TableRecordDetailsMNRStatusLabel", {
@@ -737,7 +737,7 @@ sap.ui.model.json.JSONModel.extend("CDASHM2", {
 				textAlign: "Left"
 			}).bindProperty("text", "label3").addStyleClass("borderStyle1 boldText"),
 			resizable: false,
-			width: "40px"
+			width: "auto"
 		})).addStyleClass("wraptext");
 
 		oCDASHM2TableRecordDetails.addColumn(new sap.ui.table.Column("idCDASHM2TableRecordDetailsMNRStatusValue", {
@@ -746,7 +746,7 @@ sap.ui.model.json.JSONModel.extend("CDASHM2", {
 				textAlign: "Left"
 			}).bindProperty("text", "value3").addStyleClass("borderStyle1"),
 			resizable: false,
-			width: "100px"
+			width: "auto"
 		})).addStyleClass("wraptext");
 
 		return oCDASHM2TableRecordDetails;
@@ -3356,7 +3356,7 @@ sap.ui.model.json.JSONModel.extend("CDASHM2", {
 				}
 			}).bindProperty("text", "dispname").addStyleClass("borderStyle1"),
 			resizable: false,
-			width: "100px"
+			width: "auto"
 		}));
 
 		var oCDASHM2ModelOtherDocs = new sap.ui.model.json.JSONModel();
