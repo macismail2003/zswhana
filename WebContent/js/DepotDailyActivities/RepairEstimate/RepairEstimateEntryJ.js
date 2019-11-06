@@ -2626,7 +2626,8 @@ jsnLineItemREEntryJ.removeValue = function (name, value) {
 			var oCurrent = this;
 			var oBtnPrintREEntry = new sap.m.Button("idBtnPrintREEntry", {
 				text: "Print",
-				type: sap.m.ButtonType.Unstyled,
+				//type: sap.m.ButtonType.Unstyled,
+				styled: false,
 				icon: sap.ui.core.IconPool.getIconURI("print"),
 				press: function () {
 
@@ -2771,7 +2772,8 @@ jsnLineItemREEntryJ.removeValue = function (name, value) {
 
 			var oBtnExcelREEntry = new sap.m.Button("idBtnExcelREEntry", {
 				text: "Export To Excel",
-				type: sap.m.ButtonType.Unstyled,
+				//type: sap.m.ButtonType.Unstyled,
+				styled: false,
 				icon: sap.ui.core.IconPool.getIconURI("excel-attachment"),
 				press: function () {
 					var printExcelDataC = [];
