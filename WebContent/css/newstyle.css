@@ -600,6 +600,10 @@ height: 35px !important;*/
 
 /***************************************************************************/
 
+.marginTop12 {
+    margin-top: 12px;
+}
+
 .marginTop15 {
     margin-top: 15px;
 }
@@ -756,4 +760,10 @@ height: 35px !important;*/
     padding-top: 0rem !important;
     padding-bottom: 0rem !important;
     font-size: 1px;
+}
+
+.cdashmSimulateCustomerInput {
+    margin-top: 10px !important;
+    margin-left: 10px !important;
+    height: 1.5rem !important;
 }

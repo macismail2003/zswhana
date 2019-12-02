@@ -14,6 +14,10 @@
  var oCDASHM1JsonAlertGeneral = [];
  var globalApprAllowed = true;
 
+ var globalCDASHM1CustomerID = "";
+ var globalCDASHM1CustomerIDTemp = "";
+ var oCDASHM1DISPUTEJsonEstimateLines = [];
+
  sap.ui.model.json.JSONModel.extend("CDASHM1", {
 
  	/* CDASHM1 - Create Content */
@@ -481,7 +485,19 @@
  		/* CDASHM1 - Flex - Buttons */
 
  		var oCDASHM1FlexButtonsEstimatesApproved = new sap.m.FlexBox({
- 			items: [oCDASHM1ButtonDownload_2, oCDASHM1ButtonStatusMonitorExport_2],
+ 			items: [oCDASHM1ButtonDownload_2, oCDASHM1ButtonStatusMonitorExport_2,
+ 				// new sap.ui.commons.Label("idCDASHM1PageLabelSimulateCustomer2", {
+ 				// 	text: "Simulate Customer : "
+ 				// }).addStyleClass("unitSearchResult"),
+ 				// new sap.m.Input("idCDASHM1PageInputCustomerID2", {
+ 				// 	value: ""
+ 				// }).addStyleClass("cdashmSimulateCustomerInput").addEventDelegate({
+ 				// 	onsapfocusleave: function (oEvent) {
+ 				// 		globalCDASHM1CustomerID = oEvent.srcControl.getProperty("value");
+ 				// 		oCurrent.setValueCustDash();
+ 				// 	}
+ 				// })
+ 			],
  			//justifyContent : sap.m.FlexJustifyContent.SpaceBetween,
  			direction: "Row"
  		});
@@ -514,6 +530,99 @@
  				} else {
  					/* CS Approve Table */
  					oCurrent.createCSApprove(oEvent.getSource());
+ 				}
+
+ 				//}
+ 			}
+ 		}).addStyleClass("normalBtn marginTop10 floatRight");
+
+ 		var oCDASHM1ButtonDispute = new sap.ui.commons.Button("idCDASHM1ButtonDispute", {
+ 			text: "Dispute",
+ 			//icon: "sap-icon://reset",
+ 			press: function (oEvent) {
+ 				var isSelectedOne = sap.ui.getCore().byId("idCDASHM1TableEstimatesPending").getSelectedIndices().length;
+ 				if (isSelectedOne == 0) {
+ 					sap.ui.commons.MessageBox.alert("Select an order");
+ 				} else if (isSelectedOne > 1) {
+ 					sap.ui.commons.MessageBox.alert("Select only one order at a time");
+ 				} else {
+
+ 					var isSelectedOneOnDispute = "";
+ 					var isSelectedOneOnJSR = "";
+ 					var isJSActive = "";
+
+ 					var arraySelLines = sap.ui.getCore().byId("idCDASHM1TableEstimatesPending").getSelectedIndices();
+ 					for (var i = 0; i < oCDASHMJsonEstimatesPending.length; i++) {
+ 						if (arraySelLines.indexOf(i) != -1) {
+ 							var oDetData = sap.ui.getCore().byId("idCDASHM1TableEstimatesPending").getContextByIndex(i);
+ 							if (oDetData != undefined) {
+ 								var realPath = oDetData.getPath().split('/')[2];
+
+ 								isSelectedOneOnDispute = (oCDASHMJsonEstimatesPending[realPath].ondispute == "Yes") ? true : false;
+ 								isSelectedOneOnJSR = (oCDASHMJsonEstimatesPending[realPath].onjsrequest == "Yes") ? true : false;
+ 								isJSActive = (oCDASHMJsonEstimatesPending[realPath].estimatetype == "ZGES") ? true : false;
+
+ 							}
+ 						}
+ 					}
+
+ 					if (isSelectedOneOnDispute) {
+ 						sap.ui.commons.MessageBox.alert("Selected unit is already on dispute");
+ 					} else if (isSelectedOneOnJSR) {
+ 						sap.ui.commons.MessageBox.alert("Selected unit is already requested for Joint Survey");
+ 					} else {
+ 						/* Dispute Table */
+ 						oCurrent.createCSDispute(oEvent.getSource(), "D");
+ 					}
+
+ 				}
+
+ 				//}
+ 			}
+ 		}).addStyleClass("normalBtn marginTop10 floatRight");
+
+ 		var oCDASHM1ButtonJS = new sap.ui.commons.Button("idCDASHM1ButtonJS", {
+ 			text: "Joint Survey",
+ 			//icon: "sap-icon://reset",
+ 			press: function (oEvent) {
+ 				var isSelectedOne = sap.ui.getCore().byId("idCDASHM1TableEstimatesPending").getSelectedIndices().length;
+ 				if (isSelectedOne == 0) {
+ 					sap.ui.commons.MessageBox.alert("Select an order");
+ 				} else if (isSelectedOne > 1) {
+ 					sap.ui.commons.MessageBox.alert("Select only one order at a time");
+ 				} else {
+
+ 					var isSelectedOneOnDispute = "";
+ 					var isSelectedOneOnJSR = "";
+ 					var isJSActive = "";
+ 					var arraySelLines = sap.ui.getCore().byId("idCDASHM1TableEstimatesPending").getSelectedIndices();
+ 					for (var i = 0; i < oCDASHMJsonEstimatesPending.length; i++) {
+ 						if (arraySelLines.indexOf(i) != -1) {
+ 							var oDetData = sap.ui.getCore().byId("idCDASHM1TableEstimatesPending").getContextByIndex(i);
+ 							if (oDetData != undefined) {
+ 								var realPath = oDetData.getPath().split('/')[2];
+
+ 								isSelectedOneOnDispute = (oCDASHMJsonEstimatesPending[realPath].ondispute == "Yes") ? true : false;
+ 								isSelectedOneOnJSR = (oCDASHMJsonEstimatesPending[realPath].onjsrequest == "Yes") ? true : false;
+ 								isJSActive = (oCDASHMJsonEstimatesPending[realPath].estimatetype == "ZGES") ? true : false;
+
+ 							}
+ 						}
+ 					}
+
+ 					// if (isSelectedOneOnDispute) {
+ 					// 	sap.ui.commons.MessageBox.alert("Selected unit is already on Dispute");
+ 					// } else 
+
+ 					if (isSelectedOneOnJSR) {
+ 						sap.ui.commons.MessageBox.alert("Selected unit is already requested for Joint Survey");
+ 					} else if (isJSActive) {
+ 						sap.ui.commons.MessageBox.alert("Selected unit is already having Joint Survey");
+ 					} else {
+ 						/* Dispute Table */
+ 						oCurrent.createCSDispute(oEvent.getSource(), "J");
+ 					}
+
  				}
 
  				//}
@@ -738,6 +847,38 @@
  			}).bindProperty("visible", "isPicExist").addStyleClass("borderStyle1"),
  			resizable: true,
  			width: "50px"
+ 		}));
+
+ 		oCDASHM1TableEstimatesPending.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Under Dispute"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView({
+
+ 			}).bindProperty("text", "ondispute"),
+ 			resizable: false,
+ 			width: "100px",
+ 			sortProperty: "ondispute",
+ 			filterProperty: "ondispute",
+ 			flexible: true
+ 				//autoResizable: true,
+ 				//width : 'auto'
+ 		}));
+
+ 		oCDASHM1TableEstimatesPending.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Joint Survey requested"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView({
+
+ 			}).bindProperty("text", "onjsrequest"),
+ 			resizable: false,
+ 			width: "100px",
+ 			sortProperty: "onjsrequest",
+ 			filterProperty: "onjsrequest",
+ 			flexible: true
+ 				//autoResizable: true,
+ 				//width : 'auto'
  		}));
 
  		oCDASHM1TableEstimatesPending.addColumn(new sap.ui.table.Column({
@@ -1063,6 +1204,8 @@
 
  		var oCDASHM1FlexButtonsEstimatesPending = new sap.m.FlexBox({
  			items: [oCDASHM1ButtonApprove,
+ 				oCDASHM1ButtonDispute,
+ 				oCDASHM1ButtonJS,
  				oCDASHM1ButtonDownload,
  				oCDASHM1ButtonStatusMonitorAlert
  			],
@@ -1077,11 +1220,23 @@
  						oCDASHM1ButtonStatusMonitorExport,
  						new sap.ui.commons.Label("idCDASHM1PageUnitSearchResult", {
  							text: "Total Estimate(s) Awaiting Approval : ",
- 							width: "270px"
+ 							width: "280px"
  						}).addStyleClass("unitSearchResult"),
  						new sap.ui.commons.Label("idCDASHM1PageUnitSearchResultNum", {
- 							text: ""
- 						}).addStyleClass("unitSearchResultRed")
+ 							text: "0",
+ 							width: "40px"
+ 						}).addStyleClass("unitSearchResultRed"),
+ 						new sap.ui.commons.Label("idCDASHM1PageLabelSimulateCustomer", {
+ 							text: " || Simulate Customer : "
+ 						}).addStyleClass("unitSearchResult"),
+ 						new sap.m.Input("idCDASHM1PageInputCustomerID", {
+ 							value: ""
+ 						}).addStyleClass("cdashmSimulateCustomerInput").addEventDelegate({
+ 							onsapfocusleave: function (oEvent) {
+ 								globalCDASHM1CustomerID = oEvent.srcControl.getProperty("value");
+ 								oCurrent.setValueCustDash();
+ 							}
+ 						})
  					],
  					//justifyContent : sap.m.FlexJustifyContent.SpaceBetween,
  					direction: "Row"
@@ -1129,7 +1284,15 @@
  	/* CDASHM1 - Set Value Estimates Pending */
 
  	setValueCustDash: function () {
- 		var urlToSap = "custestimatesSet?$filter=IvCustUserId eq '" + sessionStorage.uName.toUpperCase() + "'";
+
+ 		// localUserID = "";
+
+ 		if (globalCDASHM1CustomerID && globalCDASHM1CustomerIDTemp != globalCDASHM1CustomerID) {
+ 			globalCDASHM1CustomerIDTemp = globalCDASHM1CustomerID;
+ 		} else {
+ 			globalCDASHM1CustomerIDTemp = sessionStorage.uName.toUpperCase();
+ 		}
+ 		var urlToSap = "custestimatesSet?$filter=IvCustUserId eq '" + globalCDASHM1CustomerIDTemp + "'";
 
  		urlToSap = serviceDEP + urlToSap;
 
@@ -1192,7 +1355,10 @@
  								sortsubmitdate: sortsubmitdate,
  								lastaction: oCDASHM1JsonLocalCustDash[i].LastAction,
  								offhirelocation: oCDASHM1JsonLocalCustDash[i].CityDesc,
- 								status: oCDASHM1JsonLocalCustDash[i].Status
+ 								status: oCDASHM1JsonLocalCustDash[i].Status,
+
+ 								ondispute: (oCDASHM1JsonLocalCustDash[i].Dispute == "X") ? "Yes" : "No",
+ 								onjsrequest: (oCDASHM1JsonLocalCustDash[i].Jsr == "X") ? "Yes" : "No"
  							});
  						} else {
  							sortapproveddate = oCDASHM1JsonLocalCustDash[i].ApprovedDate;
@@ -1313,6 +1479,482 @@
  		var oCurrent = this;
  		var oCDASHM1ContentCSApprove = oCurrent.setCSApproveInitial(1);
  		oCurrent.openCSApprove(oCDASHM1ContentCSApprove, 1);
+ 	},
+
+ 	/* CDASHM1 - Function : Dispute Popup */
+
+ 	createCSDispute: function (approveBtn, jsordispute) {
+ 		var oCurrent = this;
+ 		var oCDASHM1ContentCSDispute = oCurrent.setCSDisputeLines(approveBtn);
+ 		oCurrent.openCSDispute(oCDASHM1ContentCSDispute, jsordispute);
+ 	},
+
+ 	/* CDASHM1 - Function - Set CS Dispute Popup content */
+
+ 	setCSDisputeLines: function (approveBtn) {
+
+ 		busyDialog.open();
+
+ 		var arraySelLines = sap.ui.getCore().byId("idCDASHM1TableEstimatesPending").getSelectedIndices();
+ 		for (var i = 0; i < oCDASHMJsonEstimatesPending.length; i++) {
+ 			if (arraySelLines.indexOf(i) != -1) {
+ 				var oDetData = sap.ui.getCore().byId("idCDASHM1TableEstimatesPending").getContextByIndex(i);
+ 				if (oDetData != undefined) {
+ 					var realPath = oDetData.getPath().split('/')[2];
+
+ 					global3SerialNo = oCDASHMJsonEstimatesPending[realPath].serialno;
+ 					global3Equnr = oCDASHMJsonEstimatesPending[realPath].serialno;
+ 					global3Depot = oCDASHMJsonEstimatesPending[realPath].depotcode;
+ 					global3DepotName = oCDASHMJsonEstimatesPending[realPath].depotname;
+ 					global3EstimateNo = oCDASHMJsonEstimatesPending[realPath].estimateno;
+ 					global3UserCost = oCDASHMJsonEstimatesPending[realPath].usercost;
+ 					globalApprAllowed = false;
+ 					global3EstimateText = oCDASHMJsonEstimatesPending[realPath].estimatetext;
+ 					global3Customer = oCDASHMJsonEstimatesPending[realPath].customercode;
+ 					global3CustomerName = oCDASHMJsonEstimatesPending[realPath].customername;
+
+ 				}
+ 			}
+ 		}
+
+ 		/* CDASHM2 - Value - Estimate Lines */
+ 		var oCDASHM2 = new CDASHM2();
+ 		oCDASHM2.setValueEstimateLines(false, false); // first false means this is not from serial istory popup
+ 		// second false means this is not a process change
+
+ 		var oCurrent = this;
+ 		var oContentDisputePopoverContent = oCurrent.setCSDisputeLinesTable();
+ 		return oContentDisputePopoverContent;
+
+ 	},
+
+ 	setCSDisputeLinesTable: function () {
+
+ 		/* CDASHM1DISPUTE - Table - Estimate Lines */
+
+ 		if (sap.ui.getCore().byId("idCDASHM1DISPUTETableEstimateLinesUI") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1DISPUTETableEstimateLinesUI").destroy();
+
+ 		var oCDASHM1DISPUTETableEstimateLinesUI = new sap.ui.table.Table("idCDASHM1DISPUTETableEstimateLinesUI", {
+ 			visibleRowCount: 6,
+ 			selectionMode: sap.ui.table.SelectionMode.MultiToggle,
+ 			toolbar: new sap.ui.commons.Toolbar({
+ 				items: [
+ 					new sap.ui.commons.Label({
+ 						text: "Please select disputed repair item(s)"
+ 					}).addStyleClass("wraptextcol"),
+ 					//new sap.ui.commons.ToolbarSeparator(),
+ 					new sap.ui.commons.Button({
+ 						text: "Toggle ISO Description",
+ 						styled: false,
+ 						press: function () {
+
+ 							if (globalIsLineCodeDesc == "CODE") {
+ 								globalIsLineCodeDesc = "DESC";
+ 								for (var i = 0; i < oCDASHM1DISPUTEJsonEstimateLines.length; i++) {
+ 									oCDASHM1DISPUTEJsonEstimateLines[i].locationdisp = oCDASHM1DISPUTEJsonEstimateLines[i].locationt;
+ 									oCDASHM1DISPUTEJsonEstimateLines[i].componentdisp = oCDASHM1DISPUTEJsonEstimateLines[i].componentt;
+ 									oCDASHM1DISPUTEJsonEstimateLines[i].damagedisp = oCDASHM1DISPUTEJsonEstimateLines[i].damaget;
+ 									oCDASHM1DISPUTEJsonEstimateLines[i].materialdisp = oCDASHM1DISPUTEJsonEstimateLines[i].materialt;
+ 									oCDASHM1DISPUTEJsonEstimateLines[i].repairdisp = oCDASHM1DISPUTEJsonEstimateLines[i].repairt;
+ 								}
+ 							} else if (globalIsLineCodeDesc == "DESC") {
+ 								globalIsLineCodeDesc = "CODE";
+ 								for (var i = 0; i < oCDASHM1DISPUTEJsonEstimateLines.length; i++) {
+ 									oCDASHM1DISPUTEJsonEstimateLines[i].locationdisp = oCDASHM1DISPUTEJsonEstimateLines[i].location;
+ 									oCDASHM1DISPUTEJsonEstimateLines[i].componentdisp = oCDASHM1DISPUTEJsonEstimateLines[i].component;
+ 									oCDASHM1DISPUTEJsonEstimateLines[i].damagedisp = oCDASHM1DISPUTEJsonEstimateLines[i].damage;
+ 									oCDASHM1DISPUTEJsonEstimateLines[i].materialdisp = oCDASHM1DISPUTEJsonEstimateLines[i].material;
+ 									oCDASHM1DISPUTEJsonEstimateLines[i].repairdisp = oCDASHM1DISPUTEJsonEstimateLines[i].repair;
+ 								}
+ 							}
+ 							sap.ui.getCore().byId("idCDASHM1DISPUTETableEstimateLinesUI").getModel().updateBindings();
+ 						}
+ 					})
+ 				]
+ 			}),
+ 			//			 footer: new sap.ui.commons.Label({
+ 			//		         text:"123"
+ 			//		       }),
+ 			//            visibleRowCountMode : sap.ui.table.VisibleRowCountMode.Interactive,
+ 		}).addStyleClass("sapUiSizeCompact tblBorder");
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Line",
+ 				textAlign: "Left"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView({}).bindProperty("text", "sno").addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "50px",
+ 			// sortProperty: "sno",
+ 			// filterProperty : "sno",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Component",
+ 				textAlign: "Left"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("CMP", {}).bindProperty("text", "componentdisp"
+ 				// 	,function(cellValue){
+ 				//  if(this.getParent().getBindingContext() != undefined){
+ 				//  var componentc = this.getParent().getBindingContext().getProperty("componentc");
+ 				//  if(componentc == "X"){
+ 				// 	 this.addStyleClass("jsChange");
+ 				//  }else{
+ 				// 	 this.removeStyleClass("jsChange");
+ 				//  }
+ 				// 	 }
+ 				//  return cellValue;
+ 				// }
+ 			).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "200px",
+ 			// sortProperty: "componentdisp",
+ 			// filterProperty : "componentdisp",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Damage",
+ 				textAlign: "Left"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("DMG", {}).bindProperty("text", "damagedisp"
+ 				// , function(cellValue){
+ 				//  if(this.getParent().getBindingContext() != undefined){
+ 				//  var damagec = this.getParent().getBindingContext().getProperty("damagec");
+ 				//  if(damagec == "X"){
+ 				// 	 this.addStyleClass("jsChange");
+ 				//  }else{
+ 				// 	 this.removeStyleClass("jsChange");
+ 				//  }
+ 				// 	 }
+ 				//  return cellValue;
+ 				// }
+ 			).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "120px",
+ 			// sortProperty: "damagedisp",
+ 			// filterProperty : "damagedisp",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Repair",
+ 				textAlign: "Left"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("REP", {}).bindProperty("text", "repairdisp"
+ 				// 	, function(cellValue){
+ 				//  if(this.getParent().getBindingContext() != undefined){
+ 				//  var repairc = this.getParent().getBindingContext().getProperty("repairc");
+ 				//  if(repairc == "X"){
+ 				// 	 this.addStyleClass("jsChange");
+ 				//  }else{
+ 				// 	 this.removeStyleClass("jsChange");
+ 				//  }
+ 				// 	 }
+ 				//  return cellValue;
+ 				// }
+ 			).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "120px",
+ 			// sortProperty: "repairdisp",
+ 			// filterProperty : "repairdisp",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Location",
+ 				textAlign: "Left"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("LOC", {}).bindProperty("text", "locationdisp"
+ 				// , function(cellValue){
+ 				//  if(this.getParent().getBindingContext() != undefined){
+ 				//  var materialc = this.getParent().getBindingContext().getProperty("locationc");
+ 				//  if(materialc == "X"){
+ 				// 	 this.addStyleClass("jsChange");
+ 				//  }else{
+ 				// 	 this.removeStyleClass("jsChange");
+ 				//  }
+ 				//  }
+ 				//  return cellValue;
+ 				// }
+ 			).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "auto",
+ 			// sortProperty: "locationdisp",
+ 			// filterProperty : "locationdisp",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Material",
+ 				textAlign: "Left"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("MATR", {}).bindProperty("text", "materialdisp"
+ 				// , function(cellValue){
+ 				//  if(this.getParent().getBindingContext() != undefined){
+ 				//  var materialc = this.getParent().getBindingContext().getProperty("materialc");
+ 				//  if(materialc == "X"){
+ 				// 	 this.addStyleClass("jsChange");
+ 				//  }else{
+ 				// 	 this.removeStyleClass("jsChange");
+ 				//  }
+ 				// 	 }
+ 				//  return cellValue;
+ 				// }
+ 			).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "150px",
+ 			// sortProperty: "materialdisp",
+ 			// filterProperty : "materialdisp",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Length"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("LEN", {
+ 				textAlign: "Right"
+ 			}).bindProperty("text", "length"
+ 				// , function(cellValue){
+ 				//  if(this.getParent().getBindingContext() != undefined){
+ 				//  var materialc = this.getParent().getBindingContext().getProperty("lengthc");
+ 				//  if(materialc == "X"){
+ 				// 	 this.addStyleClass("jsChange");
+ 				//  }else{
+ 				// 	 this.removeStyleClass("jsChange");
+ 				//  }
+ 				// 	 }
+ 				//  return cellValue;
+ 				// }
+ 			).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "70px",
+ 			// sortProperty: "length",
+ 			// filterProperty : "length",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Width"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("WID", {
+ 				textAlign: "Right"
+ 			}).bindProperty("text", "width"
+ 				// 	, function(cellValue){
+ 				//  if(this.getParent().getBindingContext() != undefined){
+ 				//  var materialc = this.getParent().getBindingContext().getProperty("widthc");
+ 				//  if(materialc == "X"){
+ 				// 	 this.addStyleClass("jsChange");
+ 				//  }else{
+ 				// 	 this.removeStyleClass("jsChange");
+ 				//  }
+ 				// 	 }
+ 				//  return cellValue;
+ 				// }
+ 			).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "70px",
+ 			// sortProperty: "width",
+ 			// filterProperty : "width",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Qty"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("QTY", {
+ 				textAlign: "Right"
+ 			}).bindProperty("text", "qty"
+ 				// 		, function(cellValue){
+ 				//
+ 				//  if(this.getParent().getBindingContext() != undefined){
+ 				//  var qtyc = this.getParent().getBindingContext().getProperty("qtyc");
+ 				//  if(qtyc == "X"){
+ 				// 	 this.addStyleClass("jsChange");
+ 				//  }else{
+ 				// 	 this.removeStyleClass("jsChange");
+ 				//  }
+ 				// 	 }
+ 				//  return cellValue;
+ 				// }
+ 			).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "50px",
+ 			//width:"75px",
+ 			// sortProperty: "qty",
+ 			// filterProperty : "qty",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Hrs"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("HRS", {
+ 				textAlign: "Right"
+ 			}).bindProperty("text", "hrs", function (cellValue) {
+
+ 				if (this.getParent().getBindingContext() != undefined) {
+ 					// var hrsc = this.getParent().getBindingContext().getProperty("hrsc");
+ 					// if(hrsc == "X"){
+ 					//  this.addStyleClass("jsChange");
+ 					// }else{
+ 					//  this.removeStyleClass("jsChange");
+ 					// }
+
+ 					var component = this.getParent().getBindingContext().getProperty("component");
+ 					if (component == "") {
+ 						this.addStyleClass('boldText');
+ 					} else {
+ 						this.removeStyleClass('boldText');
+ 					}
+ 				}
+ 				return cellValue;
+ 			}).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "90px",
+ 			//width:"75px",
+ 			//sortProperty: "hrs",
+ 			//filterProperty : "hrs",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Lab Cost"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("LABC", {
+ 				textAlign: "Right"
+ 			}).bindProperty("text", "labcost", function (cellValue) {
+
+ 				if (this.getParent().getBindingContext() != undefined) {
+ 					// var labcostc = this.getParent().getBindingContext().getProperty("labcostc");
+ 					// if(labcostc == "X"){
+ 					//  this.addStyleClass("jsChange");
+ 					// }else{
+ 					//  this.removeStyleClass("jsChange");
+ 					// }
+
+ 					var component = this.getParent().getBindingContext().getProperty("component");
+ 					if (component == "") {
+ 						this.addStyleClass('boldText');
+ 					} else {
+ 						this.removeStyleClass('boldText');
+ 					}
+ 				}
+ 				return cellValue;
+ 			}).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "90px",
+ 			//sortProperty: "labcost",
+ 			//filterProperty : "labcost",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Mat Cost"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("MATC", {
+ 				textAlign: "Right"
+ 			}).bindProperty("text", "matcost", function (cellValue) {
+
+ 				if (this.getParent().getBindingContext() != undefined) {
+ 					// var matcostc = this.getParent().getBindingContext().getProperty("matcostc");
+ 					// if(matcostc == "X"){
+ 					//  this.addStyleClass("jsChange");
+ 					// }else{
+ 					//  this.removeStyleClass("jsChange");
+ 					// }
+
+ 					var component = this.getParent().getBindingContext().getProperty("component");
+ 					if (component == "") {
+ 						this.addStyleClass('boldText');
+ 					} else {
+ 						this.removeStyleClass('boldText');
+ 					}
+ 				}
+
+ 				return cellValue;
+ 			}).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "90px",
+ 			//sortProperty: "matcost",
+ 			//filterProperty : "matcost",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Total"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("TOT", {
+ 				textAlign: "Right"
+ 			}).bindProperty("text", "total", function (cellValue) {
+
+ 				if (this.getParent().getBindingContext() != undefined) {
+ 					// var totalc = this.getParent().getBindingContext().getProperty("totalc");
+ 					// if(totalc == "X"){
+ 					//  this.addStyleClass("jsChange");
+ 					// }else{
+ 					//  this.removeStyleClass("jsChange");
+ 					// }
+
+ 					var component = this.getParent().getBindingContext().getProperty("component");
+ 					if (component == "") {
+ 						this.addStyleClass('boldText');
+ 					} else {
+ 						this.removeStyleClass('boldText');
+ 					}
+
+ 				}
+
+ 				return cellValue;
+ 			}).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "90px",
+ 			//sortProperty: "total",
+ 			//filterProperty : "total",
+ 		}));
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.addColumn(new sap.ui.table.Column({
+ 			label: new sap.ui.commons.Label({
+ 				text: "Resp",
+ 				textAlign: "Left"
+ 			}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextView("RES", {}).bindProperty("text", "resp"
+ 				// , function(cellValue){
+ 				//  if(this.getParent().getBindingContext() != undefined){
+ 				//  var respc = this.getParent().getBindingContext().getProperty("respc");
+ 				//  if(respc == "X"){
+ 				// 	 this.addStyleClass("jsChange");
+ 				//  }else{
+ 				// 	 this.removeStyleClass("jsChange");
+ 				//  }
+ 				// 	 }
+ 				//  return cellValue;
+ 				// }
+ 			).addStyleClass("borderStyle1"),
+ 			resizable: false,
+ 			width: "60px",
+ 			//sortProperty: "resp",
+ 			//filterProperty : "resp",
+ 		}));
+
+ 		oCDASHM1DISPUTEJsonEstimateLines = jQuery.grep(oCDASHM1DISPUTEJsonEstimateLines, function (element, index) {
+ 			return element.sno !== "";
+ 		});
+
+ 		var oCDASHM1DISPUTEModelEstimateLinesUI = new sap.ui.model.json.JSONModel();
+ 		oCDASHM1DISPUTEModelEstimateLinesUI.setData({
+ 			modelData: oCDASHM1DISPUTEJsonEstimateLines
+ 		});
+
+ 		oCDASHM1DISPUTETableEstimateLinesUI.setModel(oCDASHM1DISPUTEModelEstimateLinesUI);
+ 		oCDASHM1DISPUTETableEstimateLinesUI.setVisibleRowCount(oCDASHM1DISPUTEJsonEstimateLines.length);
+ 		oCDASHM1DISPUTETableEstimateLinesUI.bindRows("/modelData");
+
+ 		return oCDASHM1DISPUTETableEstimateLinesUI;
+
  	},
 
  	/* CDASHM1 - Function - Set CS Approve Popup content */
@@ -1532,6 +2174,518 @@
  		} else if (page == 2) {
  			oCDASHM1PopoverCSApprove.openBy(sap.ui.getCore().byId("idCDASHM2ButtonEquipmentLevelCSApproval"));
  		}
+
+ 	},
+
+ 	/* CDASHM1 - Function - Open PopUp CS Dispute */
+
+ 	openCSDispute: function (oCDASHM1ContentCSDispute, jsordispute) {
+
+ 		/* Page 1 : Buttons */
+ 		if (sap.ui.getCore().byId("idCDASHM1Button1CSDisputeDispute") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1Button1CSDisputeDispute").destroy();
+
+ 		if (sap.ui.getCore().byId("idCDASHM1Button1CSDisputeClose") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1Button1CSDisputeClose").destroy();
+
+ 		var oCurrent = this;
+ 		var oCDASHM1Button1CSDisputeDispute = new sap.ui.commons.Button("idCDASHM1Button1CSDisputeDispute", {
+ 			text: (jsordispute == "D") ? "Next : Reason for Dispute" : "Next : Reason for Joint Survey Request",
+ 			//styled:false,
+ 			visible: true,
+ 			//type:sap.m.ButtonType.Unstyled,
+ 			//icon: sap.ui.core.IconPool.getIconURI("email"),
+ 			press: function (oEvent) {
+
+ 				// Validation 
+ 				var isSelectedOne = sap.ui.getCore().byId("idCDASHM1DISPUTETableEstimateLinesUI").getSelectedIndices().length;
+ 				if (isSelectedOne > 0) {
+ 					sap.ui.getCore().byId("idCDASHM1NavContainerCSDispute").to("idCDASHM1Page2CSDispute");
+ 				} else {
+ 					sap.ui.commons.MessageBox.alert("Please select at least one item for dispute");
+ 				}
+
+ 			}
+ 		}); //.addStyleClass("normalBtn marginTop10 floatRight");
+
+ 		var oCDASHM1Button1CSDisputeClose = new sap.ui.commons.Button("idCDASHM1Button1CSDisputeClose", {
+ 			text: "Cancel",
+ 			//styled:false,
+ 			visible: true,
+ 			//type:sap.m.ButtonType.Unstyled,
+ 			//icon: sap.ui.core.IconPool.getIconURI("email"),
+ 			press: function (oEvent) {
+ 				sap.ui.getCore().byId("idCDASHM1DialogCSDispute").close();
+ 			}
+ 		}); //.addStyleClass("normalBtn marginTop10 floatRight");
+
+ 		var oCDASHM1Flex1CSDisputeButtons = new sap.m.FlexBox({
+ 			items: [
+ 				oCDASHM1Button1CSDisputeClose,
+ 				new sap.m.Label({
+ 					width: "15px"
+ 				}),
+ 				oCDASHM1Button1CSDisputeDispute
+ 			],
+ 			direction: "Row",
+ 			visible: true
+ 		});
+
+ 		/* Page 2 : Buttons */
+ 		if (sap.ui.getCore().byId("idCDASHM1Button2CSDisputeDispute") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1Button2CSDisputeDispute").destroy();
+
+ 		if (sap.ui.getCore().byId("idCDASHM1Button2CSDisputeClose") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1Button2CSDisputeClose").destroy();
+
+ 		var oCurrent = this;
+ 		var oCDASHM1Button2CSDisputeDispute = new sap.ui.commons.Button("idCDASHM1Button2CSDisputeDispute", {
+ 			text: "Next : Email Recipients",
+ 			//styled:false,
+ 			visible: true,
+ 			//type:sap.m.ButtonType.Unstyled,
+ 			//icon: sap.ui.core.IconPool.getIconURI("email"),
+ 			press: function (oEvent) {
+
+ 				// Validation 
+ 				var oCDASHM1TextAreaCSDisputeReasonValue = sap.ui.getCore().byId("idCDASHM1TextAreaCSDisputeReason").getValue();
+ 				oCDASHM1TextAreaCSDisputeReasonValue = oCDASHM1TextAreaCSDisputeReasonValue.replace(/\s/g, '');
+
+ 				if (oCDASHM1TextAreaCSDisputeReasonValue) {
+ 					sap.ui.getCore().byId("idCDASHM1NavContainerCSDispute").to("idCDASHM1Page3CSDispute");
+ 				} else {
+ 					sap.ui.commons.MessageBox.alert("Please provide reason for dispute");
+ 				}
+
+ 			}
+ 		}); //.addStyleClass("normalBtn marginTop10 floatRight");
+
+ 		var oCDASHM1Button2CSDisputeClose = new sap.ui.commons.Button("idCDASHM1Button2CSDisputeClose", {
+ 			text: "Cancel",
+ 			//styled:false,
+ 			visible: true,
+ 			//type:sap.m.ButtonType.Unstyled,
+ 			//icon: sap.ui.core.IconPool.getIconURI("email"),
+ 			press: function (oEvent) {
+ 				sap.ui.getCore().byId("idCDASHM1DialogCSDispute").close();
+ 			}
+ 		}); //.addStyleClass("normalBtn marginTop10 floatRight");
+
+ 		var oCDASHM1Flex2CSDisputeButtons = new sap.m.FlexBox({
+ 			items: [
+ 				oCDASHM1Button2CSDisputeClose,
+ 				new sap.m.Label({
+ 					width: "15px"
+ 				}),
+ 				oCDASHM1Button2CSDisputeDispute
+ 			],
+ 			direction: "Row",
+ 			visible: true
+ 		});
+
+ 		/* Page 2 : Buttons */
+ 		if (sap.ui.getCore().byId("idCDASHM1Button3CSDisputeDispute") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1Button3CSDisputeDispute").destroy();
+
+ 		if (sap.ui.getCore().byId("idCDASHM1Button3CSDisputeClose") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1Button3CSDisputeClose").destroy();
+
+ 		var oCurrent = this;
+ 		var oCDASHM1Button3CSDisputeDispute = new sap.ui.commons.Button("idCDASHM1Button3CSDisputeDispute", {
+ 			text: "Submit",
+ 			//styled:false,
+ 			visible: true,
+ 			//type:sap.m.ButtonType.Unstyled,
+ 			//icon: sap.ui.core.IconPool.getIconURI("email"),
+ 			press: function (oEvent) {
+ 				oCurrent.submitDispute(jsordispute);
+ 			}
+ 		}); //.addStyleClass("normalBtn marginTop10 floatRight");
+
+ 		var oCDASHM1Button3CSDisputeClose = new sap.ui.commons.Button("idCDASHM1Button3CSDisputeClose", {
+ 			text: "Cancel",
+ 			//styled:false,
+ 			visible: true,
+ 			//type:sap.m.ButtonType.Unstyled,
+ 			//icon: sap.ui.core.IconPool.getIconURI("email"),
+ 			press: function (oEvent) {
+ 				sap.ui.getCore().byId("idCDASHM1DialogCSDispute").close();
+ 			}
+ 		}); //.addStyleClass("normalBtn marginTop10 floatRight");
+
+ 		var oCDASHM1Flex3CSDisputeButtons = new sap.m.FlexBox({
+ 			items: [
+ 				oCDASHM1Button3CSDisputeClose,
+ 				new sap.m.Label({
+ 					width: "15px"
+ 				}),
+ 				oCDASHM1Button3CSDisputeDispute
+ 			],
+ 			direction: "Row",
+ 			visible: true
+ 		});
+
+ 		/* CDASHM1 - TextArea for Reason */
+
+ 		if (sap.ui.getCore().byId("idCDASHM1TextAreaCSDisputeReason") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1TextAreaCSDisputeReason").destroy();
+
+ 		var oCDASHM1TextAreaCSDisputeReason = new sap.m.TextArea("idCDASHM1TextAreaCSDisputeReason", {
+ 			value: "",
+ 			rows: 10,
+ 			cols: 100,
+ 			maxLength: 500,
+ 			placeholder: (jsordispute == "D") ? "Please provide your reason of dispute (mandatory)" : "Please provide your reason of joint survey request (mandatory)"
+ 		});
+
+ 		/* CDASHM1 - Table for Email addresses */
+
+ 		if (sap.ui.getCore().byId("idCDASHM1TableCSDisputeReceivers") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1TableCSDisputeReceivers").destroy();
+
+ 		var oCDASHM1TableCSDisputeReceivers = new sap.ui.table.Table("idCDASHM1TableCSDisputeReceivers", {
+ 			visibleRowCount: 5,
+ 			columnHeaderVisible: false,
+ 			width: '300px',
+ 			selectionMode: sap.ui.table.SelectionMode.None
+ 		}).addStyleClass("sapUiSizeCompact tblBorder1");
+
+ 		oCDASHM1TableCSDisputeReceivers.addColumn(new sap.ui.table.Column({
+ 			//label: new sap.ui.commons.Label({text: "", textAlign: "Left"}).addStyleClass("wraptextcol"),
+ 			template: new sap.ui.commons.TextField({
+ 				// textAlign: "Right"
+ 			}).bindProperty("value", "email").bindProperty("editable", "editable").addStyleClass("borderStyle referenceinput boldText"),
+ 			resizable: false,
+ 			//width:"100px"
+ 			width: "auto"
+ 		}));
+
+ 		var oCDASHM1DISPUTEJsonReceivers = [];
+ 		oModel = new sap.ui.model.odata.ODataModel(serviceDEP, true);
+
+ 		var sPath = "/disputecontactsSet('" + global3Depot + "')";
+ 		oModel.read(sPath, {
+ 			async: false,
+ 			success: function (oData, oResponse) {
+ 				var mailswithdollar = oData.Mails;
+ 				var mailsArray = mailswithdollar.split('$');
+ 				for (var i = 0; i < 2; i++) {
+ 					oCDASHM1DISPUTEJsonReceivers.push({
+ 						email: mailsArray[i],
+ 						editable: false
+ 					});
+ 				}
+ 			}
+ 		});
+
+ 		oCDASHM1DISPUTEJsonReceivers.push({
+ 			email: "",
+ 			editable: true
+ 		});
+ 		oCDASHM1DISPUTEJsonReceivers.push({
+ 			email: "",
+ 			editable: true
+ 		});
+ 		oCDASHM1DISPUTEJsonReceivers.push({
+ 			email: "",
+ 			editable: true
+ 		});
+ 		var oCDASHM1DISPUTEModelReceivers = new sap.ui.model.json.JSONModel();
+ 		oCDASHM1DISPUTEModelReceivers.setData({
+ 			modelData: oCDASHM1DISPUTEJsonReceivers
+ 		});
+
+ 		oCDASHM1TableCSDisputeReceivers.setModel(oCDASHM1DISPUTEModelReceivers);
+ 		oCDASHM1TableCSDisputeReceivers.setVisibleRowCount(oCDASHM1DISPUTEJsonReceivers.length);
+ 		oCDASHM1TableCSDisputeReceivers.bindRows("/modelData");
+
+ 		/* CDASHM1 - Flexbox - Line Items */
+
+ 		var oCDASHM1Flex1CSDisputePopup = new sap.m.FlexBox({
+ 			items: [
+ 				oCDASHM1ContentCSDispute,
+ 				new sap.m.Label({
+ 					width: "15px"
+ 				}),
+ 				oCDASHM1Flex1CSDisputeButtons
+ 			],
+ 			direction: "Column",
+ 			visible: true
+ 		});
+
+ 		/* CDASHM1 - Flexbox - Reason for Dispute */
+
+ 		var oCDASHM1Flex2CSDisputePopup = new sap.m.FlexBox({
+ 			items: [
+ 				oCDASHM1TextAreaCSDisputeReason,
+ 				new sap.m.Label({
+ 					width: "15px"
+ 				}),
+ 				oCDASHM1Flex2CSDisputeButtons
+ 			],
+ 			direction: "Column",
+ 			visible: true
+ 		});
+
+ 		/* CDASHM1 - Flexbox - Receivers */
+
+ 		var oCDASHM1Flex3CSDisputePopup = new sap.m.FlexBox({
+ 			items: [
+ 				oCDASHM1TableCSDisputeReceivers,
+ 				new sap.m.Label({
+ 					width: "15px"
+ 				}),
+ 				oCDASHM1Flex3CSDisputeButtons
+ 			],
+ 			direction: "Column",
+ 			visible: true
+ 		});
+
+ 		// if (sap.ui.getCore().byId("idCDASHM1AppCSDispute") != undefined)
+ 		// 		sap.ui.getCore().byId("idCDASHM1AppCSDispute").destroy();
+
+ 		// 	var oCDASHM1AppCSDispute = new sap.m.App("idCDASHM1AppCSDispute",{
+ 		// 		pages : [oCDASHM1Page1CSDispute, oCDASHM1Page2CSDispute, oCDASHM1Page3CSDispute]
+ 		// 	});
+
+ 		if (sap.ui.getCore().byId("idCDASHM1Page1CSDispute") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1Page1CSDispute").destroy();
+
+ 		var oCDASHM1Page1CSDispute = new sap.m.Page("idCDASHM1Page1CSDispute", {
+ 			content: [oCDASHM1Flex1CSDisputePopup],
+ 			enableScrolling: true,
+ 			showHeader: true,
+ 			title: (jsordispute == "D") ? "Dispute : Choose Line Items" : "Joint Survey Request : Choose Line Items",
+ 			showNavButton: false
+ 		});
+
+ 		if (sap.ui.getCore().byId("idCDASHM1Page2CSDispute") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1Page2CSDispute").destroy();
+
+ 		var oCDASHM1Page2CSDispute = new sap.m.Page("idCDASHM1Page2CSDispute", {
+ 			content: [oCDASHM1Flex2CSDisputePopup],
+ 			enableScrolling: true,
+ 			showHeader: true,
+ 			title: (jsordispute == "D") ? "Dispute : Reason" : "Joint Survey Request : Reason",
+ 			showNavButton: true,
+ 			navButtonPress: function () {
+ 				sap.ui.getCore().byId("idCDASHM1NavContainerCSDispute").back();
+ 			}
+ 		});
+
+ 		if (sap.ui.getCore().byId("idCDASHM1Page3CSDispute") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1Page3CSDispute").destroy();
+
+ 		var oCDASHM1Page3CSDispute = new sap.m.Page("idCDASHM1Page3CSDispute", {
+ 			content: [oCDASHM1Flex3CSDisputePopup],
+ 			enableScrolling: true,
+ 			showHeader: true,
+ 			title: (jsordispute == "D") ? "Dispute : Email Recipients" : "Joint Survey Request : Email Recipients",
+ 			showNavButton: true,
+ 			navButtonPress: function () {
+ 				sap.ui.getCore().byId("idCDASHM1NavContainerCSDispute").back();
+ 			}
+ 		});
+
+ 		if (sap.ui.getCore().byId("idCDASHM1NavContainerCSDispute") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1NavContainerCSDispute").destroy();
+ 		var oCDASHM1NavContainerCSDispute = new sap.m.NavContainer("idCDASHM1NavContainerCSDispute", {
+ 			pages: [oCDASHM1Page1CSDispute, oCDASHM1Page2CSDispute, oCDASHM1Page3CSDispute]
+ 		});
+ 		/* CDASHM1 - Popover - Customer Approval */
+
+ 		// if (sap.ui.getCore().byId("idCDASHM1PopoverCSDispute") != undefined)
+ 		// 	sap.ui.getCore().byId("idCDASHM1PopoverCSDispute").destroy();
+
+ 		// var oCDASHM1PopoverCSDispute = new sap.m.Popover("idCDASHM1PopoverCSDispute", {
+ 		// 	//title: "Customer Approval",
+ 		// 	width: "1300px",
+ 		// 	modal: true,
+ 		// 	showHeader: false,
+ 		// 	placement: sap.m.PlacementType.Right,
+ 		// 	footer: new sap.m.Bar({
+ 		// 		visible: false,
+ 		// 		contentRight: [
+ 		// 			new sap.m.Button({
+ 		// 				text: "Close",
+ 		// 				icon: "sap-icon://close",
+ 		// 				press: function () {
+
+ 		// 				}
+ 		// 			})
+ 		// 		],
+ 		// 	}),
+ 		// 	content: new sap.m.VBox({
+ 		// 		//width:"300px",
+ 		// 		items: [oCDASHM1FlexCSDisputePopup]
+ 		// 	}),
+
+ 		// }).addStyleClass("sapUiPopupWithPadding");
+
+ 		// oCDASHM1PopoverCSDispute.openBy(sap.ui.getCore().byId("idCDASHM1ButtonDispute"));
+
+ 		if (sap.ui.getCore().byId("idCDASHM1DialogCSDispute") != undefined)
+ 			sap.ui.getCore().byId("idCDASHM1DialogCSDispute").destroy();
+
+ 		var oCDASHM1DialogCSDispute = new sap.m.Dialog("idCDASHM1DialogCSDispute", {
+ 			width: "90%",
+ 			contentHeight: "50%",
+ 			contentWidth: "90%",
+ 			showCloseButton: false,
+ 			modal: true,
+ 			showHeader: false
+ 		});
+ 		//oDialog1.setTitle("My first Dialog");
+ 		//var oText = new sap.ui.commons.TextView({text: "Hello World!"});
+ 		oCDASHM1DialogCSDispute.addContent(oCDASHM1NavContainerCSDispute);
+ 		//oCDASHM1DialogCSDispute.addButton(new sap.ui.commons.Button({text: "Close", press:function(){oDialog1.close();}}));
+
+ 		oCDASHM1DialogCSDispute.open();
+
+ 		busyDialog.close();
+
+ 	},
+
+ 	/* CDASHM1 - Submit Dispute */
+
+ 	submitDispute: function (jsordispute) {
+ 		debugger;
+ 		/* This is the payload for post method */
+ 		var postData = {};
+
+ 		/* Get Model's data */
+
+ 		/* 
+ 		
+ 		{
+		  "Equnr" : "GESU7898989",
+		  "Estimate" : "10098977",
+		  "headerlines" : [
+		    {
+		      "Equnr" : "GESU7898989",
+		  "Estimate" : "10098977",
+		  "LineItem" : "001"
+		    }
+		  ],
+		  "headerrecipients" : [
+		    {
+		      "Equnr" : "GESU7898989",
+		  "Estimate" : "10098977",
+		  "Email" : "seyed.ismail@seacoglobal.com"
+		    }
+		  ]
+		}
+		*/
+
+ 		// var postData = sap.ui.getCore().getModel("data").getData();
+
+ 		postData.Equnr = global3SerialNo;
+ 		postData.Estimate = global3EstimateNo;
+ 		postData.Reqtype = jsordispute;
+ 		postData.Customer = global3Customer;
+ 		postData.CustomerName = global3CustomerName;
+ 		postData.Depot = global3Depot;
+ 		postData.Reason = sap.ui.getCore().byId("idCDASHM1TextAreaCSDisputeReason").getValue();
+
+ 		// Prepare Line Items
+
+ 		postData.headerlines = [];
+ 		var headerlinesb4 = sap.ui.getCore().byId("idCDASHM1DISPUTETableEstimateLinesUI").getModel().getData().modelData;
+
+ 		var arraySelLines = sap.ui.getCore().byId("idCDASHM1DISPUTETableEstimateLinesUI").getSelectedIndices();
+ 		for (var i = 0; i < headerlinesb4.length; i++) {
+ 			if (arraySelLines.indexOf(i) != -1) {
+ 				var oDetData = sap.ui.getCore().byId("idCDASHM1DISPUTETableEstimateLinesUI").getContextByIndex(i);
+ 				if (oDetData != undefined) {
+ 					var realPath = oDetData.getPath().split('/')[2];
+ 					postData.headerlines.push({
+ 						Equnr: global3SerialNo,
+ 						Estimate: global3EstimateNo,
+ 						LineItem: headerlinesb4[i].sno,
+ 						LocationCode: headerlinesb4[i].location,
+ 						ComponentCode: headerlinesb4[i].component,
+ 						DamageCode: headerlinesb4[i].damage,
+ 						MaterialCode: headerlinesb4[i].material,
+ 						RepairCode: headerlinesb4[i].repair,
+ 						MaterialText: headerlinesb4[i].materialt,
+ 						ComponentText: headerlinesb4[i].componentt,
+ 						LocationText: headerlinesb4[i].locationt,
+ 						DamageText: headerlinesb4[i].damaget,
+ 						RepairText: headerlinesb4[i].repairt,
+ 						RepairLength: headerlinesb4[i].length,
+ 						RepairWidth: headerlinesb4[i].width,
+ 						RepairMeasureUnit: headerlinesb4[i].measure,
+ 						Quantity: headerlinesb4[i].qty,
+ 						ManHours: headerlinesb4[i].hrs,
+ 						MaterialCost: headerlinesb4[i].matcost,
+ 						TotalCost: headerlinesb4[i].total,
+ 						Responsibility: headerlinesb4[i].resp,
+ 						LabourRate: headerlinesb4[i].labcost,
+ 						LabourCost: headerlinesb4[i].labcost,
+ 						BulletinNumber: headerlinesb4[i].bulletin,
+
+ 						LocationCodeC: headerlinesb4[i].locationc,
+ 						ComponentCodeC: headerlinesb4[i].componentc,
+ 						DamageCodeC: headerlinesb4[i].damagec,
+ 						MaterialCodeC: headerlinesb4[i].materialc,
+ 						RepairCodeC: headerlinesb4[i].repairc,
+ 						RepairLengthC: headerlinesb4[i].lengthc,
+ 						RepairWidthC: headerlinesb4[i].widthc,
+ 						RepairMeasureUnitC: headerlinesb4[i].measurec,
+ 						QuantityC: headerlinesb4[i].qtyc,
+ 						ManHoursC: headerlinesb4[i].hrsc,
+ 						MaterialCostC: headerlinesb4[i].matcostc,
+ 						TotalCostC: headerlinesb4[i].totalc,
+ 						ResponsibilityC: headerlinesb4[i].respc,
+ 						LabourRateC: headerlinesb4[i].labcostc,
+ 						LabourCostC: headerlinesb4[i].labcostc,
+ 						BulletinNumberC: headerlinesb4[i].bulletinc
+ 					});
+ 				}
+ 			}
+ 		}
+
+ 		// postData.headerlines = [{
+ 		// 	"Equnr": "GESU1788892",
+ 		// 	"Estimate": "10098999",
+ 		// 	"LineItem": "002",
+ 		// 	"LocationCode": "IXXX"
+ 		// }];
+
+ 		// Prepare Recipients
+
+ 		postData.headerrecipients = [];
+ 		var headerrecipients = sap.ui.getCore().byId("idCDASHM1TableCSDisputeReceivers").getModel().getData().modelData;
+ 		for (var i = 0; i < headerrecipients.length; i++) {
+ 			if (headerrecipients[i].email) {
+ 				postData.headerrecipients.push({
+ 					Equnr: global3SerialNo,
+ 					Estimate: global3EstimateNo,
+ 					Email: headerrecipients[i].email
+ 				});
+ 			}
+ 		}
+
+ 		// postData.headerrecipients = [{
+ 		// 	"Equnr": "GESU1788892",
+ 		// 	"Estimate": "10098999",
+ 		// 	"Email": "seyed.ismail@seacoglobal.com"
+ 		// }];
+ 		var oCurrent = this;
+ 		busyDialog.open();
+ 		oModel = new sap.ui.model.odata.ODataModel(serviceDEP, true);
+ 		oModel.create("/disputeheaderSet", postData, null, function (oData, oResponse) {
+ 				oCurrent.setValueCustDash();
+ 				busyDialog.close();
+ 				sap.ui.getCore().byId("idCDASHM1DialogCSDispute").close();
+ 				sap.ui.commons.MessageBox.alert((jsordispute == "D") ? "Dispute is submitted successfully" :
+ 					"Joint Survey Request is submitted successfully");
+ 			},
+ 			function (err) { //Error Callback
+ 				sap.ui.commons.MessageBox.alert((jsordispute == "D") ? "Dispute cannot be submitted now" :
+ 					"Joint Survey Request cannot be submitted now");
+ 				busyDialog.close();
+ 			});
 
  	},
 

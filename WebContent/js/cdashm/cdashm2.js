@@ -1801,6 +1801,7 @@ sap.ui.model.json.JSONModel.extend("CDASHM2", {
 						labcost: labcostlocal,
 						bulletin: oCDASHM2JsonEstimateLinesLoc[i].BulletinNumber,
 						total: totallocal
+
 					});
 				}
 			},
@@ -1810,12 +1811,18 @@ sap.ui.model.json.JSONModel.extend("CDASHM2", {
 				busyDialog.close();
 			});
 
+		oCDASHM1DISPUTEJsonEstimateLines = oCDASHM2JsonEstimateLines;
 		var oCDASHM2ModelEstimateLinesUI = new sap.ui.model.json.JSONModel();
 		oCDASHM2ModelEstimateLinesUI.setData({
 			modelData: oCDASHM2JsonEstimateLines
 		});
 
 		var oCDASHM2TableEstimateLinesUI = sap.ui.getCore().byId("idCDASHM2TableEstimateLinesUI");
+
+		if (!oCDASHM2TableEstimateLinesUI) {
+			return;
+		}
+
 		oCDASHM2TableEstimateLinesUI.setModel(oCDASHM2ModelEstimateLinesUI);
 		oCDASHM2TableEstimateLinesUI.setVisibleRowCount(oCDASHM2JsonEstimateLines.length);
 		oCDASHM2TableEstimateLinesUI.bindRows("/modelData");
